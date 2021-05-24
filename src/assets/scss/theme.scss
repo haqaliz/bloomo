@@ -1,0 +1,46 @@
+.it-btn {
+	border-radius: $border-radius;
+	padding: $full-padding;
+	border: none !important;
+	min-width: $general-size;
+	height: $general-size;
+	box-shadow: none;
+
+	&.it-btn--neutral {
+		background-color: $blue-doublet;
+
+		.it-btn-text {
+			color: $ebonics;
+		}
+
+		&::focus {
+			box-shadow: $ebonics 0 1px 1px 0,0 0 0 3px rgba($ebonics, 0.2);
+		}
+	}
+}
+
+.it-avatar {
+	&.it-avatar--square {
+		border-radius:  $border-radius - 0.5rem;
+	}
+}
+
+.it-tag {
+	&.it-tag--neutral {
+		background-color: black;
+		color: white;
+		border: none;
+		padding: $small-gap + 0.2rem;
+		border-radius: $border-radius - 0.5rem;
+	}
+}
+
+.it-tooltip {
+	.it-tooltip-popper {
+		.it-tooltip-content {
+			background-color: black;
+			color: white;
+			border-radius: $border-radius - 0.8rem;
+		}
+	}
+}

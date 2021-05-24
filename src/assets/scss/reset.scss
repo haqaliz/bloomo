@@ -1,0 +1,62 @@
+/*** GLOBAL STYLES ***/
+
+* {
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+strong {
+  font-weight: 500;
+}
+
+code {
+  font-size: $content-size - 0.3rem;
+  font-family: courier;
+  padding: 3px;
+  background-color: $ebonics;
+  border-radius: 4px;
+  margin: 0 $small-gap;
+}
+
+blockquote {
+  &::before,
+  &::after {
+    content: '';
+    content: none;
+  }
+}
+
+q {
+  &::before,
+  &::after {
+    content: '';
+    content: none;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.flex {
+  flex: 1;
+}
