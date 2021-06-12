@@ -2,13 +2,76 @@
 	"card": {
 		"palm": {
 			"cols": {
-				"default": 5,
-				"1400": 4,
+				"default": 4,
 				"1250": 3,
 				"920": 2,
 				"620": 1
 			},
+			"gutter": "1.2rem",
+			"size": 230
+		},
+		"bloom": {
+			"size": 63
+		}
+	},
+	"artwork": {
+		"sections": ["context", "description", "auctions"],
+		"auctions": {
+			"cols": {
+				"default": 4,
+				"1350": 3,
+				"1020": 2,
+				"675": 1
+			},
 			"gutter": "1.2rem"
+		},
+		"cols": {
+			"default": 2,
+			"920": 1
+		},
+		"gutter": "1.2rem"
+	},
+	"assets": {
+		"sections": [
+			{
+				"name": "preferences",
+				"description": "You can change your artworks priority using this asset. And you can see your artworks on top of the home timeline again until someone else attach a new priority."
+			}
+		],
+		"cols": {
+			"default": 2,
+			"1300": 1
+		},
+		"gutter": "1.2rem"
+	},
+	"statuses": { 
+		"minted": {
+			"name": "Minted",
+			"icon": "account_balance"
+		},
+		"transferred": {
+			"name": "Reserved price",
+			"icon": "visibility"
+		},
+		"settled": {
+			"name": "Sold :)",
+			"icon": "payment"
+		},
+		"sold": {
+			"name": "Sold :)",
+			"icon": "payment"
+		},
+		"listed": {
+			"name": "Listed",
+			"icon": "attach_money"
+		},
+		"pricechanged": {
+			"name": "Reserve price changed",
+			"icon": "attach_money"
+		},
+		"bid": {
+			"name": "New bid!",
+			"icon": "trending_up"
 		}
 	}
 }

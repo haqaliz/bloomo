@@ -9,19 +9,18 @@ $manga-lavender: #a8a8c0;
 $border-radius: 1.5rem;
 $general-size: 64px;
 
-$small-gap: 0.45rem;
 $large-gap: 1.2rem;
-
-$full-padding: $large-gap $small-gap;
-
-$title-size: 2.2rem;
-$title-weight: 600;
-$title-line-height: $title-size + 0.1rem;
 
 $content-size: 1.2rem;
 $content-weight: 400;
 $content-line-height: $content-size + 0.1rem;
 
 $medium-breakpoint: 900px;
-$small-breakpoint: 600px;
+$small-breakpoint: 650px;
 $extra-small-breakpoint: 350px;
+
+@mixin make-content-size($offset: 0, $weight-offset: 0) {
+	font-size: $content-size - $offset;
+	font-weight: $content-weight - $weight-offset;
+	line-height: $content-line-height - $offset;
+}

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "consola": "^2.15.3",
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
     "equal-vue": "^0.74.0",

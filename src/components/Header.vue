@@ -1,7 +1,44 @@
 <template>
   <div class="header">
+    <div class="menu-bar">
+      <it-button type="black" icon="home" @click="$router.push('/')" />
+      <Username
+        v-if="
+          $route.params.username
+          && (
+            !$store.state.user
+            || ($store.state.user
+            && $store.state.user.username !== $route.params.username)
+          )
+        "
+        :limit-offset="0.8"
+        :content="user"
+        :disabled="true"
+      />
+    </div>
+    <template v-if="$store.state.authenticated && $store.state.user">
+      <it-badge
+        v-if="$store.getters.shopping"
+        type="danger"
+        class="profile-menu-item force"
+        point
+      >
+        <it-button
+          type="black"
+          icon="shopping_cart"
+          @click="$Message({ text: 'hello' })"
+        />
+      </it-badge>
+      <it-button
+        type="black"
+        class="profile-menu-item"
+        icon="account_balance_wallet"
+        @click="$router.push('/profile/assets')"
+      />
+    </template>
     <it-button
-      :class="$store.state.user ? 'profile-container' : 'connect-wallet'"
+      type="black"
+      :class="`main-navigation-btn ${($store.state.user ? 'profile-summary' : 'connect-wallet')}`"
       :loading="connecting"
       @click="authenticate"
     >
@@ -10,7 +47,7 @@
       </template>
       <template v-else-if="$store.state.user">
         <it-avatar
-          :src="$store.state.user && $store.state.user.profileImageUrl"
+          :src="$store.state.user && $store.state.user.profile"
           color="#a8a8c0"
           size="40px"
           square
@@ -25,23 +62,28 @@
 </template>
 
 <script>
+import Username from './Username.vue';
+import api from '../api';
 import _ from 'lodash';
 
 const { ethereum } = window;
-const isUnlocked = _.get(ethereum, '_metamask.isUnlocked');
 
 export default {
   name: 'Header',
+  components: {
+    Username,
+  },
   data() {
     return {
       ethereum,
       connecting: true,
+      user: null,
     };
   },
   computed: {
     formattedBalance() {
       const readableBalance = (this.$store.state.balance / 10e17);
-      return readableBalance > 0 ? readableBalance.toFixed(4) : 0;
+      return parseFloat(readableBalance.toFixed(4), 10) > 0 ? readableBalance.toFixed(4) : 0;
     },
     secureAddress() {
       const addr = this.$store.state.address;
@@ -55,8 +97,24 @@ export default {
       },
       deep: true,
     },
+    '$route.params': {
+      async handler() {
+        this.user = null;
+        if (!this.$route.params.username) return;
+        this.$Loading.start();
+        const searchResult = await api.search(this.$route.params.username, ['users'], 1);
+        if (!searchResult.users.length) {
+          this.$Loading.finish();
+          return;
+        }
+        this.user = await api.user.get(searchResult.users[0].id, false);
+        this.$Loading.finish();
+      },
+      deep: true,
+    },
   },
   async mounted() {
+    const isUnlocked = _.get(ethereum, '_metamask.isUnlocked');
     if (!await isUnlocked()) this.connecting = false;
   },
   methods: {
@@ -65,7 +123,7 @@ export default {
         this.connecting = true;
         await this.$store.dispatch('connectWallet');
       } else {
-        this.$router.push('profile');
+        this.$router.push('/profile');
       }
     },
   },
@@ -74,6 +132,7 @@ export default {
 
 <style lang='scss'>
   .header {
+    display: inherit;
     position: fixed;
     padding: $large-gap;
     top: 0;
@@ -84,35 +143,64 @@ export default {
     background-color: white;
     border-bottom: 1px solid $ebonics;
 
-    .connect-wallet {
-      padding: $large-gap;
+    .menu-bar {
+      display: inherit;
+      flex-direction: row;
+      flex: 1;
+      margin-right: $large-gap;
+
+      &> * {
+        margin-right: $large-gap;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
     }
 
-    .profile-container  {
-      padding: $large-gap + 0.8rem $large-gap - 0.4rem;
+    .profile-menu-item {
+      margin-right: $large-gap;
+    }
 
-      .it-btn-text {
-        align-items: center;
+    @media screen and (max-width: $extra-small-breakpoint) {
+      .profile-menu-item:not(.force) {
+        margin-right: 0;
+      }
+    }
 
-        .profile-content {
-          display: inherit;
-          flex-direction: column;
-          align-items: flex-start;
-          margin-left: $small-gap;
+    .main-navigation-btn {
+      @media screen and (max-width: $extra-small-breakpoint) {
+        display: none;
+      }
 
-          h3 {
-            font-size: $large-gap;
+      &.connect-wallet {
+        padding: $large-gap;
+      }
 
-            sub {
-              font-size: 14px;
-              margin-left: $small-gap - 0.2rem;
+      &.profile-summary  {
+        .it-btn-text {
+          align-items: center;
+
+          .profile-content {
+            display: inherit;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: $large-gap - 0.5rem;
+
+            h3 {
+              font-size: $large-gap;
+
+              sub {
+                font-size: 14px;
+                margin-left: $large-gap - 0.8rem;
+              }
             }
-          }
 
-          span {
-            color: $manga-lavender;
-            font-size: 0.7rem;
-            margin-top: 0.15rem;
+            span {
+              color: $manga-lavender;
+              font-size: 0.7rem;
+              margin-top: 0.15rem;
+            }
           }
         }
       }

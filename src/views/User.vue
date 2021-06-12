@@ -1,6 +1,6 @@
 <template>
   <masonry
-    class="artworks"
+    class="artworks flex"
     :cols="cardOptions.palm.cols"
     :gutter="cardOptions.palm.gutter"
   >
@@ -8,6 +8,8 @@
       v-for="artwork in artworks"
       :key="`artwork-${artwork.id}`"
       :content="artwork"
+      :size="cardOptions.palm.size"
+      :exclude="['user', 'type', 'artwork']"
     />
   </masonry>
 </template>
@@ -45,15 +47,15 @@ export default {
       if (
         this.$store.state.user
         && this.$store.state.user.username === this.$route.params.username
-      ) this.$router.push('Profile');
+      ) this.$router.push('/profile');
       this.$Loading.start();
       const searchResult = await api.search(this.$route.params.username, ['users'], 1);
-      if (!searchResult.users.hits.length) {
+      if (!searchResult.users.length) {
         this.$Loading.finish();
         return;
       }
-      const foundPublicAddress = searchResult.users.hits[0].publicKey;
-      this.artworks = await api.user.artworks(foundPublicAddress);
+      const foundUserId = searchResult.users[0].id;
+      this.artworks = await api.user.artworks(foundUserId);
       this.$Loading.finish();
     },
   },
