@@ -32,12 +32,18 @@
 		"gutter": "1.2rem"
 	},
 	"assets": {
-		"sections": [
-			{
+		"sections": {
+			"preferences": {
 				"name": "preferences",
-				"description": "You can change your artworks priority using this asset. And you can see your artworks on top of the home timeline again until someone else attach a new priority."
+				"description": "You can change your artworks priority using this asset. And you can see your artworks on top of the home timeline again until someone else attach a new priority.",
+				"coeff": 0.5
+			},
+			"bold": {
+				"name": "bold",
+				"description": "You can show your artwork in the timeline forever after you activate it for each artwork.",
+				"coeff": 1
 			}
-		],
+		},
 		"cols": {
 			"default": 2,
 			"1300": 1

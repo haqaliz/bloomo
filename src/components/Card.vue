@@ -23,7 +23,7 @@
     </div>
     <div class="extra-detail">
       <it-avatar
-        v-if="!exclude.includes('artwork') && content.bold"
+        v-if="!exclude.includes('artwork') && content.is_bold"
         :src="content.preview"
         class="artwork"
         square

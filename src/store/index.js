@@ -21,7 +21,14 @@ export default createStore({
     shopping: (state) => (_.reduce(state.shoppingCart, (a, i) => { // eslint-disable-line
       return a += i; // eslint-disable-line
     }, 0) > 0),
-    amountInEth: (state) => (amount) => {
+    checkoutItems: (state) => {
+      const items = {};
+      for (const key in state.shoppingCart) {
+        if (state.shoppingCart[key]) items[key] = state.shoppingCart[key];
+      }
+      return items;
+    },
+    amountInEth: (state) => (amount, type) => {
       const calculated = {
         price: 0,
         priceInUSD: 0,
@@ -29,8 +36,8 @@ export default createStore({
       if (!amount || !state.ethPrice) {
         return calculated;
       }
-      const fiftyCent = (1 / state.ethPrice) / 2;
-      calculated.price = (amount * fiftyCent).toFixed(5);
+      const amountCoeff = (1 / state.ethPrice) * assetsOptions.sections[type].coeff;
+      calculated.price = (amount * amountCoeff).toFixed(5);
       calculated.priceInUSD = (calculated.price * state.ethPrice).toFixed(2);
       return calculated;
     },
@@ -45,7 +52,6 @@ export default createStore({
     authenticate: (state, user) => {
       state.authenticated = true;
       state.user = user;
-      console.log(state);
     },
     deauthenticate: (state) => {
       state.authenticated = false;

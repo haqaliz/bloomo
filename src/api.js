@@ -14,7 +14,6 @@ const api = {
         const res = await ax.get('/user/current');
         return res.data;
       } catch (e) {
-        console.log(e);
         utils.log.info('Unauthorized!');
         return false;
       }

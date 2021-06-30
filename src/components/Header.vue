@@ -26,7 +26,7 @@
         <it-button
           type="black"
           icon="shopping_cart"
-          @click="$Message({ text: 'hello' })"
+          @click="modal = true"
         />
       </it-badge>
       <it-button
@@ -59,6 +59,25 @@
       </template>
     </it-button>
   </div>
+  <it-modal v-if="$store.getters.shopping" v-model="modal" class="checkout-modal">
+    <template #body>
+      <table class="flex">
+        <thead>
+          <th>Asset Type</th>
+          <th>Qt.</th>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(item, k) in $store.getters.checkoutItems"
+            :key="k"
+          >
+            <td>{{ k }}</td>
+            <td>{{ item }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
+  </it-modal>
 </template>
 
 <script>
@@ -78,6 +97,7 @@ export default {
       ethereum,
       connecting: true,
       user: null,
+      modal: true,
     };
   },
   computed: {
@@ -202,6 +222,37 @@ export default {
               margin-top: 0.15rem;
             }
           }
+        }
+      }
+    }
+  }
+
+  .checkout-modal {
+    .it-modal-content {
+      display: flex;
+
+      table {
+        border-radius: $border-radius;
+        overflow: hidden;
+        margin: $large-gap - 0.8rem 0;
+
+        thead {
+          background-color: black;
+          color: white;
+        }
+
+        tbody {
+          tr {
+            &:nth-child(odd) {
+              background-color: $ebonics;
+            }
+          }
+        }
+
+        th,
+        td {
+          text-align: left;
+          padding: $large-gap;
         }
       }
     }
