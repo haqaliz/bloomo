@@ -33,20 +33,6 @@ export default {
   },
   async mounted() {
     this.artworks = await api.user.artworks('all');
-    /* const { ethereum } = window;
-    const test = await ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [
-        {
-          from: '0x9d282d7616Ca36c88bAad094D1C8D5f0720d5E61',
-          to: '0x9352fD6885E5B96e9a92A84D49AbDbEeA9DF8d2E',
-          gas: '0x76c0', // 30400
-          gasPrice: '0x9184e72a000', // 10000000000000
-          value: '0x9184e72a', // 2441406250
-        },
-      ],
-    });
-    console.log(test); */
   },
 };
 </script>

@@ -18,13 +18,17 @@ export default createStore({
     ethPrice: null,
   },
   getters: {
-    shopping: (state) => (_.reduce(state.shoppingCart, (a, i) => { // eslint-disable-line
-      return a += i; // eslint-disable-line
-    }, 0) > 0),
-    checkoutItems: (state) => {
+    shopping: (state) => (_.reduce(state.shoppingCart, (a, i) => (a += i), 0) > 0), // eslint-disable-line
+    checkoutItems: (state, getters) => {
       const items = {};
       for (const key in state.shoppingCart) {
-        if (state.shoppingCart[key]) items[key] = state.shoppingCart[key];
+        if (state.shoppingCart[key]) {
+          const prices = getters.amountInEth(state.shoppingCart[key], key);
+          items[key] = {
+            quantity: state.shoppingCart[key],
+            ...prices,
+          };
+        }
       }
       return items;
     },
@@ -37,8 +41,10 @@ export default createStore({
         return calculated;
       }
       const amountCoeff = (1 / state.ethPrice) * assetsOptions.sections[type].coeff;
-      calculated.price = (amount * amountCoeff).toFixed(5);
-      calculated.priceInUSD = (calculated.price * state.ethPrice).toFixed(2);
+      calculated.priceRaw = (amount * amountCoeff);
+      calculated.price = calculated.priceRaw.toFixed(5);
+      calculated.priceInUSDRaw = (calculated.price * state.ethPrice);
+      calculated.priceInUSD = calculated.priceInUSDRaw.toFixed(2);
       return calculated;
     },
   },

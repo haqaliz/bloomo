@@ -19,7 +19,8 @@
     "vue-next-masonry": "^1.0.3",
     "vue-router": "^4.0.8",
     "vue-showdown": "^3.1.0",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "web3": "^1.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

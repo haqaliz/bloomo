@@ -65,17 +65,53 @@
         <thead>
           <th>Asset Type</th>
           <th>Qt.</th>
+          <th>Price</th>
+          <th />
         </thead>
         <tbody>
           <tr
             v-for="(item, k) in $store.getters.checkoutItems"
             :key="k"
           >
-            <td>{{ k }}</td>
-            <td>{{ item }}</td>
+            <td>
+              <div class="item">
+                <it-icon
+                  box box-color="#a8a8c0"
+                  color="#000"
+                  :name="assetsOptions.sections[k].icon"
+                />
+                {{ k }}
+              </div>
+            </td>
+            <td>{{ item.quantity }}</td>
+            <td>
+              <div class="item">
+                <it-badge
+                  :value="`${item.price} ETH`"
+                  square
+                />
+                <it-badge
+                  :value="`$${item.priceInUSD}`"
+                  square
+                />
+              </div>
+            </td>
+            <td>
+              <it-icon
+                class="checkout-delete"
+                box box-color="#f0d8d8"
+                color="#000"
+                name="delete"
+                @click="$store.state.shoppingCart[k] = 0; if (!$store.getters.shopping)  modal = false;"
+              />
+            </td>
           </tr>
         </tbody>
       </table>
+      <div class="btn-container">
+        <it-button type="black" icon="payment" @click="payCheckoutItems">Pay</it-button>
+        <it-button type="black" icon="chevron_right" @click="modal = false">Continue</it-button>
+      </div>
     </template>
   </it-modal>
 </template>
@@ -84,6 +120,8 @@
 import Username from './Username.vue';
 import api from '../api';
 import _ from 'lodash';
+import utils from '../utils';
+import { assets as assetsOptions } from '../config.json';
 
 const { ethereum } = window;
 
@@ -97,7 +135,8 @@ export default {
       ethereum,
       connecting: true,
       user: null,
-      modal: true,
+      modal: false,
+      assetsOptions,
     };
   },
   computed: {
@@ -145,6 +184,19 @@ export default {
       } else {
         this.$router.push('/profile');
       }
+    },
+    async payCheckoutItems() {
+      const transaction = await utils.sendTransaction(
+        _.reduce(this.$store.getters.checkoutItems, (a, i) => (a += i.priceRaw), 0), // eslint-disable-line
+        this.$store.state.address,
+      );
+      // if (!transaction) {
+        // show proper message for rejected payment
+        // return;
+      // }
+      // console.log(transaction);
+      // contract hash id
+      // https://etherscan.io/tx/<transaction-hash>
     },
   },
 };
@@ -230,11 +282,12 @@ export default {
   .checkout-modal {
     .it-modal-content {
       display: flex;
+      flex-direction: column;
 
       table {
         border-radius: $border-radius;
         overflow: hidden;
-        margin: $large-gap - 0.8rem 0;
+        margin: $large-gap - 0.8rem 0 $large-gap + 0.2rem 0;
 
         thead {
           background-color: black;
@@ -246,6 +299,24 @@ export default {
             &:nth-child(odd) {
               background-color: $ebonics;
             }
+
+            td {
+              font-weight: 600;
+
+              .item {
+                display: flex;
+                align-items: center;
+
+                .it-icon,
+                .it-badge {
+                  margin-right: $large-gap;
+                }
+              }
+
+              .checkout-delete {
+                cursor:  pointer;
+              }
+            }
           }
         }
 
@@ -253,6 +324,20 @@ export default {
         td {
           text-align: left;
           padding: $large-gap;
+          vertical-align: middle;
+        }
+      }
+
+      .btn-container {
+        display:inherit;
+        margin-bottom: $large-gap - 0.8rem;
+
+        .it-btn {
+          margin-right: $large-gap;
+
+          &:last-child {
+            margin-right: 0;
+          }
         }
       }
     }
