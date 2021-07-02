@@ -33,7 +33,7 @@ module.exports = {
         ],
       });
     } catch (e) {
-      consola.log('Transaction wasn\'t sucessful!');
+      consola.log('Transaction wasn\'t successful!');
       return false;
     }
   },

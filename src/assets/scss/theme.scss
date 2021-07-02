@@ -28,6 +28,14 @@
 	}
 }
 
+.it-alert {
+	border-radius: $border-radius;
+
+	.it-icon {
+		border-radius: $border-radius - 0.6rem;
+	}
+}
+
 .it-slider:not(.it-slider--disabled) {
 	&:focus {
 		.it-slider-controller {

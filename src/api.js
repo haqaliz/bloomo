@@ -11,7 +11,7 @@ const api = {
   user: {
     authenticated: async () => {
       try {
-        const res = await ax.get('/user/current');
+        const res = await ax.get('user/current');
         return res.data;
       } catch (e) {
         utils.log.info('Unauthorized!');
@@ -33,6 +33,11 @@ const api = {
         params: { offset, limit },
       });
       return res.data;
+    },
+    assets: {
+      put: async (contract, content) => ax.put('user/assets', {
+        contract, content,
+      }),
     },
   },
   artwork: async (id) => {

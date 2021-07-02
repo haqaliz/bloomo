@@ -112,6 +112,7 @@
         <it-button type="black" icon="payment" @click="payCheckoutItems">Pay</it-button>
         <it-button type="black" icon="chevron_right" @click="modal = false">Continue</it-button>
       </div>
+      <it-alert v-if="modalAlert" iconbox type="danger" title="Payment rejected!" />
     </template>
   </it-modal>
 </template>
@@ -137,6 +138,7 @@ export default {
       user: null,
       modal: false,
       assetsOptions,
+      modalAlert: false,
     };
   },
   computed: {
@@ -186,17 +188,21 @@ export default {
       }
     },
     async payCheckoutItems() {
-      const transaction = await utils.sendTransaction(
+      this.$Loading.start();
+      const contract = await utils.sendTransaction(
         _.reduce(this.$store.getters.checkoutItems, (a, i) => (a += i.priceRaw), 0), // eslint-disable-line
         this.$store.state.address,
       );
-      // if (!transaction) {
-        // show proper message for rejected payment
-        // return;
-      // }
-      // console.log(transaction);
-      // contract hash id
-      // https://etherscan.io/tx/<transaction-hash>
+      if (!contract) {
+        this.$Loading.finish();
+        this.modalAlert = true;
+        setTimeout(() => { this.modalAlert = false; }, 5000);
+        return;
+      }
+      await api.user.assets.put(contract, this.$store.getters.checkoutItems);
+      this.$Loading.finish();
+      this.$store.commit('resetShoppingCart');
+      this.modal = false;
     },
   },
 };
@@ -339,6 +345,10 @@ export default {
             margin-right: 0;
           }
         }
+      }
+
+      .it-alert {
+        margin: $large-gap - 0.2rem 0 $large-gap - 0.9rem 0;
       }
     }
   }

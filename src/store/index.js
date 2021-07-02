@@ -66,6 +66,9 @@ export default createStore({
     setEthPrice: (state, price) => {
       state.ethPrice = parseFloat(price.amount, 10);
     },
+    resetShoppingCart: (state) => {
+      state.shoppingCart = _.mapValues(state.shoppingCart, (i) => 0);
+    },
   },
   actions: {
     checkAuthenticated: async (context) => {
