@@ -3,7 +3,11 @@
     type="black"
     class="card-tag creator-detail"
     :loading="!content || !content.username"
-    @click="$event.stopPropagation(); (!disabled && content && $router.push(`/user/${creator.raw}`))"
+    @click="$event.stopPropagation(); (
+      !disabled
+      && content
+      && $router.push(`/user/${creator.raw}`)
+    )"
   >
     <template v-if="content && content.username">
       <it-avatar
@@ -27,7 +31,7 @@
 </template>
 
 <script>
-import { formatStatement, formatDate } from '../utils';
+import { formatStatement } from '../utils';
 
 export default {
   name: 'Username',

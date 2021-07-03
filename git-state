@@ -1,0 +1,26 @@
+commit 1c7df3c405554878426653c2225ddece686f2606
+Author: Ali Alizade Haqiqi <aliz@x-matik.com>
+Date:   Sun Jul 4 02:40:12 2021 +0430
+
+    power ups feature
+    
+    Signed-off-by: Ali Alizade Haqiqi <aliz@x-matik.com>
+
+do
+git-state
+package.json
+src/App.vue
+src/api.js
+src/assets/scss/theme.scss
+src/assets/scss/variables.scss
+src/components/Asset.vue
+src/components/Card.vue
+src/components/Header.vue
+src/components/PowerUps.vue
+src/components/Price.vue
+src/config.json
+src/store/index.js
+src/views/Artwork.vue
+src/views/Home.vue
+src/views/Profile.vue
+src/views/User.vue

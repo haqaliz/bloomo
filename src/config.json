@@ -3,10 +3,9 @@
 	"card": {
 		"palm": {
 			"cols": {
-				"default": 4,
-				"1250": 3,
-				"920": 2,
-				"620": 1
+				"default": 3,
+				"1300": 2,
+				"920": 1
 			},
 			"gutter": "1.2rem",
 			"size": 230
@@ -36,15 +35,21 @@
 		"sections": {
 			"preferences": {
 				"name": "preferences",
+				"title": "Bring artwork up",
 				"description": "You can change your artworks priority using this asset. And you can see your artworks on top of the home timeline again until someone else attach a new priority.",
+				"short_description": "your artwork will come up in the timeline.",
 				"coeff": 0.5,
+				"limit": 120,
 				"icon": "priority_high"
 			},
 			"bold": {
 				"name": "bold",
-				"description": "You can show your artwork in the timeline forever after you activate it for each artwork.",
+				"title": "Make artwork bold",
+				"description": "You can show your artwork content in all pages forever after you activate it for each artwork.",
+				"short_description": "Peoples can see your artwork content in all pages forever.",
 				"coeff": 1,
-				"icon": "image"
+				"icon": "image",
+				"important": true
 			}
 		},
 		"cols": {

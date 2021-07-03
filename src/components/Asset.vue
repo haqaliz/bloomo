@@ -72,6 +72,11 @@ export default {
       };
     },
   },
+  watch: {
+    '$store.getters.shopping': function assetWatchingOnShopping() {
+      if (!this.$store.getters.shopping && this.buying) this.buying = false;
+    },
+  },
 };
 </script>
 

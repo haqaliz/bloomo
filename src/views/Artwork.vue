@@ -21,6 +21,9 @@
           :icon="artwork.type === 'video' ? 'play_arrow' : 'search'"
           @click="modal = true"
         />
+        <PowerUps
+          :reference="artwork"
+        />
       </div>
       <Card
         v-else-if="section === 'description'"
@@ -28,7 +31,7 @@
         :size="400"
         :limit-offset="10"
         :clickable="false"
-        :exclude="['type', 'artwork']"
+        :exclude="['type', 'artwork', 'power-ups']"
       />
     </template>
   </masonry>
@@ -79,9 +82,10 @@
 import Price from '../components/Price.vue';
 import Timestamp from '../components/Timestamp.vue';
 import Username from '../components/Username.vue';
+import PowerUps from '../components/PowerUps.vue';
 import Card from '../components/Card.vue';
 import api from '../api';
-import { formatStatement, formatDate } from '../utils';
+import { formatStatement } from '../utils';
 import { artwork as artworkOptions } from '../config.json';
 
 export default {
@@ -90,13 +94,16 @@ export default {
     Price,
     Timestamp,
     Username,
+    PowerUps,
     Card,
   },
   data() {
     return {
       artwork: null,
+      artworkInitialized: false,
       modal: false,
       artworkOptions,
+      interval: null,
     };
   },
   computed: {
@@ -110,19 +117,42 @@ export default {
     },
   },
   async mounted() {
-    this.$Loading.start();
-    this.artwork = await api.artwork(this.$route.params.artwork_id);
-    const actors = await Promise.all(
-      this.artwork.history.map((i) => api.user.get(i.actor, false)),
-    );
-    this.artwork = {
-      ...this.artwork,
-      history: this.artwork.history.map((i, k) => ({
-        ...i,
-        actor: actors[k],
-      })),
-    };
-    this.$Loading.finish();
+    if (!this.artworkInitialized) this.$Loading.start();
+    await this.fetchArtworkDetail();
+    this.interval = setInterval(() => this.fetchArtworkDetail(), 5000);
+    if (!this.artworkInitialized) {
+      this.$Loading.finish();
+      this.artworkInitialized = true;
+    }
+  },
+  unmounted() {
+    if (this.interval) clearInterval(this.interval);
+  },
+  methods: {
+    async fetchArtworkDetail() {
+      let artworkHistory = (this.artwork && this.artwork.history) || [];
+      this.artwork = await api.artwork(this.$route.params.artwork_id);
+      if (
+        (!this.artworkInitialized && !artworkHistory.length)
+        || (
+          this.artworkInitialized
+          && artworkHistory.length
+          && artworkHistory.length !== this.artwork.history.length
+        )
+      ) {
+        const actors = await Promise.all(
+          this.artwork.history.map((i) => api.user.get(i.actor, false)),
+        );
+        artworkHistory = this.artwork.history.map((i, k) => ({
+          ...i,
+          actor: actors[k],
+        }));
+      }
+      this.artwork = {
+        ...this.artwork,
+        history: artworkHistory,
+      };
+    },
   },
 };
 </script>
@@ -156,6 +186,14 @@ export default {
         border: 1px solid $ebonics;
         align-items: flex-end;
         justify-content: flex-start;
+
+        .it-btn {
+          margin-right: $large-gap;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
       }
     }
 
@@ -191,7 +229,7 @@ export default {
 
   .artwork-modal {
     .it-modal-content {
-      padding: 0;
+      padding: 0 !important;
       height: $small-breakpoint;
       overflow:hidden;
 

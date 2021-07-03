@@ -7,7 +7,7 @@
         type="bloom"
         :content="artwork"
         :size="cardOptions.bloom.size"
-        :exclude="['date']"
+        :exclude="['date', 'power-ups']"
         :limit-offset="0.8"
       />
     </div>
@@ -32,7 +32,7 @@ export default {
     };
   },
   async mounted() {
-    this.artworks = await api.user.artworks('all');
+    this.artworks = await api.artworks('all');
   },
 };
 </script>

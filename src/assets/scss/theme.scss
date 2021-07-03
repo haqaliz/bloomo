@@ -36,6 +36,60 @@
 	}
 }
 
+.it-checkbox-wrapper {
+	.it-checkbox-check-wrapper {
+		border-radius: $border-radius - 0.6rem;
+		width: $general-size - 24px;
+		height: $general-size - 24px;
+
+		.it-checkbox {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-color: black;
+ 			box-shadow: 0 1px 1px rgba(black, 0.3);
+			border-radius: $border-radius - 0.6rem;
+			width: $general-size - 24px;
+			height: $general-size - 24px;
+
+			&.it-checkbox--primary {
+				&:hover {
+					border-color: black;
+				}
+
+				&:active {
+					background-color: rgba(black, 0.1);
+			 		border-color: black;
+				}
+			}
+
+			&.it-checkbox--primary--checked {
+				background-color: black;
+			 	border-color: black;
+
+				&:hover,
+				&:active{
+					background-color: black !important;
+				}
+
+				&> i {
+					font-size: $large-gap;
+				}
+			}
+		}
+		
+		.it-checkbox-input:focus +.it-checkbox--primary {
+			border-color: black;
+			box-shadow:0 0 0 3px rgba(black, 0.2);
+		}
+	}
+
+	.it-checkbox-label-group {
+		margin-left: $large-gap;
+		padding-left: 0;
+	}
+}
+
 .it-slider:not(.it-slider--disabled) {
 	&:focus {
 		.it-slider-controller {
@@ -94,12 +148,65 @@
 	.it-modal-wrap {
 		.it-modal-body {
 			border-radius: $border-radius;
+
+			.it-modal-content {
+				padding: $large-gap;
+			}
+
+			.it-modal-footer {
+				padding: $large-gap;
+				justify-content: flex-start;
+				background-color: white;
+
+				.btn-container {
+					display:inherit;
+
+					.it-btn {
+					  margin: 0 $large-gap 0 0;
+
+					  &:last-child {
+						margin-right: 0;
+				 	 }
+					}
+			  	}
+
+			  	.it-alert {
+					margin: $large-gap - 0.2rem 0 $large-gap - 0.9rem 0;
+			 	}
+			}
 		}
 	}
 }
 
 .it-icon {
 	font-size: $large-gap + 0.3rem;
+}
+
+.pulse::before {
+  box-shadow: 0 0 0 0 black;
+}
+
+.inset-pulse::before {
+  box-shadow: inset 0 0 0 0 black;
+}
+
+@keyframes waveEffect {
+  100%,
+  40% {
+    box-shadow: 0 0 0 6px black;
+  }
+}
+@-webkit-keyframes InsetWaveEffect {
+  100%,
+  40% {
+    box-shadow: inset 0 0 0 6px black;
+  }
+}
+@keyframes InsetWaveEffect {
+  100%,
+  40% {
+    box-shadow: inset 0 0 0 6px black;
+  }
 }
 
 #app {

@@ -7,7 +7,6 @@
 
 <script>
 import Header from './components/Header.vue';
-import api from './api';
 import _ from 'lodash';
 
 const { ethereum } = window;
@@ -19,14 +18,23 @@ export default {
   },
   async created() {
     this.$store.dispatch('updateEthPrice');
-    setInterval(() => this.$store.dispatch('updateEthPrice'), 5000);
     const isUnlocked = _.get(ethereum, '_metamask.isUnlocked');
     if (ethereum && !ethereum.selectedAddress && await isUnlocked()) {
       await this.$store.dispatch('connectWallet');
     }
     await this.$store.dispatch('checkAuthenticated');
-    ethereum.on('disconnect', () => this.$store.dispatch('checkAuthenticated'));
-    ethereum.on('connect', () => this.$store.dispatch('checkAuthenticated'));
+    setInterval(() => Promise.all([
+      this.$store.dispatch('checkAuthenticated'),
+      this.$store.dispatch('updateEthPrice'),
+    ]), 5000);
+    ethereum.on('disconnect', () => {
+      this.$store.dispatch('checkAuthenticated');
+      this.$router.go(this.$router.currentRoute);
+    });
+    ethereum.on('connect', () => {
+      this.$store.dispatch('checkAuthenticated');
+      this.$router.go(this.$router.currentRoute);
+    });
   },
 };
 </script>

@@ -5,12 +5,12 @@
       <Username
         v-if="
           $route.params.username
-          && (
-            !$store.state.user
-            || ($store.state.user
-            && $store.state.user.username !== $route.params.username)
-          )
-        "
+            && (
+              !$store.state.user
+              || ($store.state.user
+                && $store.state.user.username !== $route.params.username
+              )
+            )"
         :limit-offset="0.8"
         :content="user"
         :disabled="true"
@@ -102,12 +102,17 @@
                 box box-color="#f0d8d8"
                 color="#000"
                 name="delete"
-                @click="$store.state.shoppingCart[k] = 0; if (!$store.getters.shopping)  modal = false;"
+                @click="
+                  $store.state.shoppingCart[k] = 0;
+                  if (!$store.getters.shopping) modal = false;
+                "
               />
             </td>
           </tr>
         </tbody>
       </table>
+    </template>
+    <template #actions>
       <div class="btn-container">
         <it-button type="black" icon="payment" @click="payCheckoutItems">Pay</it-button>
         <it-button type="black" icon="chevron_right" @click="modal = false">Continue</it-button>
@@ -136,6 +141,7 @@ export default {
       ethereum,
       connecting: true,
       user: null,
+      userInitialized: false,
       modal: false,
       assetsOptions,
       modalAlert: false,
@@ -162,14 +168,17 @@ export default {
       async handler() {
         this.user = null;
         if (!this.$route.params.username) return;
-        this.$Loading.start();
+        if (!this.userInitialized) this.$Loading.start();
         const searchResult = await api.search(this.$route.params.username, ['users'], 1);
         if (!searchResult.users.length) {
           this.$Loading.finish();
           return;
         }
         this.user = await api.user.get(searchResult.users[0].id, false);
-        this.$Loading.finish();
+        if (!this.userInitialized) {
+          this.$Loading.finish();
+          this.userInitialized = true;
+        }
       },
       deep: true,
     },
@@ -200,6 +209,7 @@ export default {
         return;
       }
       await api.user.assets.put(contract, this.$store.getters.checkoutItems);
+      await this.$store.dispatch('checkAuthenticated');
       this.$Loading.finish();
       this.$store.commit('resetShoppingCart');
       this.modal = false;
@@ -289,11 +299,12 @@ export default {
     .it-modal-content {
       display: flex;
       flex-direction: column;
+      padding: $large-gap $large-gap 0 $large-gap !important;
 
       table {
         border-radius: $border-radius;
         overflow: hidden;
-        margin: $large-gap - 0.8rem 0 $large-gap + 0.2rem 0;
+        margin-bottom: $large-gap;
 
         thead {
           background-color: black;
@@ -333,23 +344,10 @@ export default {
           vertical-align: middle;
         }
       }
+    }
 
-      .btn-container {
-        display:inherit;
-        margin-bottom: $large-gap - 0.8rem;
-
-        .it-btn {
-          margin-right: $large-gap;
-
-          &:last-child {
-            margin-right: 0;
-          }
-        }
-      }
-
-      .it-alert {
-        margin: $large-gap - 0.2rem 0 $large-gap - 0.9rem 0;
-      }
+    .it-modal-footer {
+      padding: 0 $large-gap $large-gap $large-gap;
     }
   }
 </style>

@@ -3,7 +3,7 @@
     v-if="content"
     :content="status.price ? status.name : 'Not listed :('"
     placement="top"
-    class="section"
+    class="section price-section"
   >
     <it-tag
       type="black"

@@ -3,7 +3,7 @@
     :class="`card ${cardType}`"
     :style="{
       backgroundColor: content.color,
-      height: `${size}px`,
+      minHeight: `${size}px`,
       cursor: clickable ? 'pointer' : 'default',
     }"
     @click="clickable && $router.push(`/artwork/${content.id}`)"
@@ -21,7 +21,21 @@
       <span v-if="cardType === 'bloom'" class="description">{{ strippedDescription }}</span>
       <VueShowdown v-else-if="cardType === 'palm'" class="description" :markdown="description" />
     </div>
-    <div class="extra-detail">
+    <div :class="{
+      'extra-detail': true,
+      authenticated: $store.state.authenticated
+        && $store.state.user
+        && (
+          $route.name.toLowerCase() === 'profile'
+          || $store.state.user.username === $route.params.username
+        ),
+      bolded: !exclude.includes('artwork') && content.is_bold
+    }"
+    >
+      <PowerUps
+        v-if="$store.state.authenticated && $store.state.user && !exclude.includes('power-ups')"
+        :reference="content"
+      />
       <it-avatar
         v-if="!exclude.includes('artwork') && content.is_bold"
         :src="content.preview"
@@ -40,7 +54,7 @@
       <Price :content="(content.lastActivity && content.lastActivity) ?? content.history[0]" />
       <Timestamp
         v-if="!exclude.includes('date')"
-        :content="this.content.renewed_at"
+        :content="content.renewed_at"
       />
     </div>
   </div>
@@ -52,6 +66,7 @@ import { formatStatement } from '../utils';
 import Price from './Price.vue';
 import Timestamp from './Timestamp.vue';
 import Username from './Username.vue';
+import PowerUps from './PowerUps.vue';
 
 export default {
   name: 'Card',
@@ -59,6 +74,7 @@ export default {
     Price,
     Timestamp,
     Username,
+    PowerUps,
   },
   props: {
     type: {
@@ -88,7 +104,7 @@ export default {
       return this.type.toLowerCase();
     },
     title() {
-      return formatStatement(this.content.name, 18 * this.limitOffset);
+      return formatStatement(this.content.name, 10 * this.limitOffset);
     },
     contentType() {
       return {
@@ -119,6 +135,10 @@ export default {
 
     &.bloom {
       align-items: center;
+
+      .creator-detail {
+        margin-bottom: 0;
+      }
 
       .artwork-detail,
       .extra-detail {
@@ -201,6 +221,31 @@ export default {
       .extra-detail {
         margin-top: $large-gap;
       }
+
+      .extra-detail {
+        .artwork {
+          margin-right: $large-gap;
+          border-radius: $border-radius;
+        }
+
+        @media screen and (max-width: $large-breakpoint) {
+          &.authenticated {
+            .timestamp {
+              display: none;
+            }
+          }
+        }
+
+        @media screen and (max-width: $extra-small-breakpoint) {
+          flex-wrap: wrap;
+
+          &.bolded {
+            .price-section {
+              margin-top: $large-gap;
+            }
+          }
+        }
+      }
     }
 
     .creator-detail {
@@ -225,6 +270,10 @@ export default {
 
       .timestamp {
         margin-left: $large-gap;
+      }
+
+      .power-ups-handler {
+         margin-right: $large-gap;
       }
     }
   }

@@ -20,7 +20,7 @@ module.exports = {
     );
     return shortFormat ? formatted.replace(/^about /gi, '') : formatted;
   },
-  sendTransaction: async (amount, from, gasPrice = 470000000000000) => {
+  sendTransaction: async (amount, from) => {
     try {
       return await ethereum.request({
         method: 'eth_sendTransaction',

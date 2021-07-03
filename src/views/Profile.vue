@@ -27,7 +27,7 @@
         :key="`artwork-${artwork.id}`"
         :content="artwork"
         :size="cardOptions.palm.size"
-        :exclude="['user', 'type', 'artwork']"
+        :exclude="['user', 'type']"
       />
     </masonry>
   </template>
@@ -51,6 +51,7 @@ export default {
   data() {
     return {
       artworks: null,
+      artworksInitialized: false,
       cardOptions,
     };
   },
@@ -65,9 +66,12 @@ export default {
   methods: {
     async loadArtworks() {
       if (!this.$store.state.address || !this.$store.state.authenticated) return;
-      this.$Loading.start();
-      this.artworks = await api.user.artworks(this.$store.state.address);
-      this.$Loading.finish();
+      if (!this.artworksInitialized) this.$Loading.start();
+      this.artworks = await api.user.artworks();
+      if (!this.artworksInitialized) {
+        this.$Loading.finish();
+        this.artworksInitialized = true;
+      }
     },
     fullAddress(link) {
       return {
@@ -152,6 +156,10 @@ export default {
 
   .artworks {
     padding: $large-gap;
+
+    .card:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .not-authenticated {

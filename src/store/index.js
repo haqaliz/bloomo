@@ -67,11 +67,12 @@ export default createStore({
       state.ethPrice = parseFloat(price.amount, 10);
     },
     resetShoppingCart: (state) => {
-      state.shoppingCart = _.mapValues(state.shoppingCart, (i) => 0);
+      state.shoppingCart = _.mapValues(state.shoppingCart, () => 0);
     },
   },
   actions: {
     checkAuthenticated: async (context) => {
+      if (ethereum && !ethereum.selectedAddress) return;
       const user = await api.user.authenticated();
       if (user && ethereum.selectedAddress) {
         context.commit('authenticate', user);
