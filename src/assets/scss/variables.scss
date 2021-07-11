@@ -4,6 +4,8 @@ $blue-doublet: #181860;
 $gorgeous: #f0d8d8;
 $memoir: #c0a8c0;
 $manga-lavender: #a8a8c0;
+$black: #000;
+$white: #fff;
 
 // CONSTANTS
 $border-radius: 1.5rem;
@@ -21,7 +23,7 @@ $small-breakpoint: 650px;
 $extra-small-breakpoint: 350px;
 
 @mixin make-content-size($offset: 0, $weight-offset: 0) {
-	font-size: $content-size - $offset;
-	font-weight: $content-weight - $weight-offset;
-	line-height: $content-line-height - $offset;
+  font-size: $content-size - $offset;
+  font-weight: $content-weight - $weight-offset;
+  line-height: $content-line-height - $offset;
 }

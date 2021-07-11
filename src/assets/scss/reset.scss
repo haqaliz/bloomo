@@ -30,13 +30,13 @@ strong {
 }
 
 code {
-  display: flex;
-  font-size: $content-size - 0.3rem;
-  font-family: courier;
-  padding: $large-gap;
   background-color: $ebonics;
   border-radius: $border-radius - 0.3rem;
+  display: flex;
+  font-family: courier;
+  font-size: $content-size - 0.3rem;
   margin: $large-gap 0 0 0;
+  padding: $large-gap;
 }
 
 blockquote {
@@ -65,8 +65,8 @@ table {
 }
 
 .fluid-container {
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
   flex: 1;
+  justify-content: center;
 }
