@@ -1,4 +1,4 @@
-commit 1c7df3c405554878426653c2225ddece686f2606
+commit 6b04cd008ffac575306167f479c23ec7cf0d550f
 Author: Ali Alizade Haqiqi <aliz@x-matik.com>
 Date:   Sun Jul 4 02:40:12 2021 +0430
 
@@ -9,6 +9,7 @@ Date:   Sun Jul 4 02:40:12 2021 +0430
 do
 git-state
 package.json
+public/index.html
 src/App.vue
 src/api.js
 src/assets/scss/theme.scss
@@ -18,8 +19,10 @@ src/components/Card.vue
 src/components/Header.vue
 src/components/PowerUps.vue
 src/components/Price.vue
+src/components/Username.vue
 src/config.json
 src/store/index.js
+src/utils.js
 src/views/Artwork.vue
 src/views/Home.vue
 src/views/Profile.vue
