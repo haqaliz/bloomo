@@ -1,4 +1,7 @@
 <template>
+  <teleport to="head">
+    <title>Hello</title>
+  </teleport>
   <div class="artworks-container flex">
     <div class="artworks-content">
       <Card
