@@ -1,7 +1,7 @@
 <template>
   <it-tooltip
     v-if="content"
-    :content="status.price ? status.name : 'Not listed :('"
+    :content="status.price ? status.full_name : 'Not listed :('"
     placement="top"
     class="section price-section"
   >
@@ -45,6 +45,7 @@ export default {
       return {
         type,
         name: _.mapValues(statuses, (i) => i.name)[type],
+        full_name: _.mapValues(statuses, (i) => i.full_name)[type],
         icon: _.mapValues(statuses, (i) => i.icon)[type],
         price: parseFloat(this.content.amount, 10).toFixed(2),
       };

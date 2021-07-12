@@ -60,31 +60,38 @@
 	},
 	"statuses": { 
 		"minted": {
-			"name": "Minted",
+			"name": "M",
+			"full_name": "Artwork Minted",
 			"icon": "account_balance"
 		},
 		"transferred": {
-			"name": "Reserved price",
+			"name": "R",
+			"full_name": "Price Reserved",
 			"icon": "visibility"
 		},
 		"settled": {
-			"name": "Sold :)",
+			"name": "S",
+			"full_name": "Artwork Sold :)",
 			"icon": "payment"
 		},
 		"sold": {
-			"name": "Sold :)",
+			"name": "S",
+			"full_name": "Artwork Sold :)",
 			"icon": "payment"
 		},
 		"listed": {
-			"name": "Listed",
+			"name": "L",
+			"full_name": "Artwork Listed",
 			"icon": "attach_money"
 		},
 		"pricechanged": {
-			"name": "Reserve price changed",
+			"name": "C",
+			"full_name": "Reserve Price Changed",
 			"icon": "attach_money"
 		},
 		"bid": {
-			"name": "New bid!",
+			"name": "B",
+			"full_name": "New Bid!",
 			"icon": "trending_up"
 		}
 	}

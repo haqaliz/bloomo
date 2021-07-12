@@ -185,6 +185,10 @@ export default {
         border-radius: $border-radius - 0.2rem;
         padding: $large-gap - 0.5rem $large-gap - 1rem;
 
+        .creator-detail {
+          align-self: center;
+        }
+
         .artwork-detail {
           margin-left: $large-gap - 1rem;
 

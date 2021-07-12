@@ -1,0 +1,10 @@
+commit 4746581e3eb2abcb85aa3a70ccf5e386fdf1da09
+Author: Ali Alizade Haqiqi <aliz@x-matik.com>
+Date:   Mon Jul 12 16:31:28 2021 +0430
+
+    fix some style issue
+    
+    Signed-off-by: Ali Alizade Haqiqi <aliz@x-matik.com>
+
+src/components/Card.vue
+src/config.json
