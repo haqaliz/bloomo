@@ -64,6 +64,7 @@ export default {
 
     .it-icon {
       @include make-content-size(-0.3rem, -200);
+      margin-right: $large-gap - 0.75rem;
     }
 
     sub {

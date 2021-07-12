@@ -35,8 +35,8 @@
         v-model="$store.state.shoppingCart[content.name]"
         :step-points="true"
         :min="0"
-        :max="50"
-        :step="5"
+        :max="150"
+        :step="25"
       />
     </div>
     <it-button
@@ -131,6 +131,15 @@ export default {
     align-items: center;
     text-transform: capitalize;
     margin-bottom: $large-gap;
+
+    @media screen and (max-width: $extra-small-breakpoint) {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .asset-price {
+        margin-left: 0 !important;
+      }
+    }
 
     .asset-price {
       margin-left: $large-gap;

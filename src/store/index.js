@@ -1,7 +1,9 @@
 import { createStore } from 'vuex';
 import api from '../api';
 import _ from 'lodash';
-import { assets as assetsOptions } from '../config.json';
+import {
+  assets as assetsOptions,
+} from '../config.json';
 
 const { ethereum } = window;
 

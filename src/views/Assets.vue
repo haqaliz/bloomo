@@ -62,6 +62,10 @@ export default {
           flex: 1;
           height: $general-size;
           align-items: center;
+
+          @media screen and (max-width: $extra-small-breakpoint) {
+            height: $general-size + 43px;
+          }
         }
       }
   }

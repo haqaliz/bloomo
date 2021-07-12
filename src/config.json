@@ -1,4 +1,10 @@
 {
+	"app": {
+		"name": "Bloomo",
+		"description": "Bloomo is Foundation faster mirror with more abilities such as bolding artworks change the priority of artworks, analysis and evn more features.",
+		"image": "opengraph.jpg",
+		"url": "https://bloomo.app"
+	},
 	"walletId": "0x9352fD6885E5B96e9a92A84D49AbDbEeA9DF8d2E",
 	"card": {
 		"palm": {

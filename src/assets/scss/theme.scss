@@ -17,8 +17,15 @@
 }
 
 .it-avatar {
+  line-height: 38px;
+
   &.it-avatar--square {
     border-radius: $border-radius - 0.5rem;
+  }
+
+  .it-avatar-text {
+    color: $black;
+    font-weight: 600;
   }
 }
 
@@ -148,6 +155,22 @@
   .it-modal-wrap {
     .it-modal-body {
       border-radius: $border-radius;
+
+      @media screen and (max-width: $extra-small-breakpoint) {
+        max-width: 280px !important;
+
+        .it-modal-content {
+          max-height: 275px;
+        }
+      }
+
+      @media screen and (min-width: $extra-small-breakpoint) and (max-width: $small-breakpoint) {
+        max-width: 336px !important;
+
+        .it-modal-content {
+          max-height: 375px;
+        }
+      }
 
       .it-modal-content {
         padding: $large-gap;

@@ -17,7 +17,7 @@
     "lodash": "^4.17.20",
     "vue": "^3.0.0",
     "vue-next-masonry": "^1.0.3",
-    "vue-router": "^4.0.8",
+    "vue-router": "^4.0.10",
     "vue-showdown": "^3.1.0",
     "vuex": "^4.0.0-0",
     "web3": "^1.4.0"

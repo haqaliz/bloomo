@@ -1,63 +1,65 @@
 <template>
   <div class="header">
-    <div class="menu-bar">
-      <it-button type="black" icon="home" @click="$router.push('/')" />
-      <Username
-        v-if="
-          $route.params.username
-            && (
-              !$store.state.user
-              || ($store.state.user
-                && $store.state.user.username !== $route.params.username
-              )
-            )"
-        :limit-offset="0.8"
-        :content="user"
-        :disabled="true"
-      />
-    </div>
-    <template v-if="$store.state.authenticated && $store.state.user">
-      <it-badge
-        v-if="$store.getters.shopping"
-        type="danger"
-        class="profile-menu-item force"
-        point
-      >
+    <div class="header-container">
+      <div class="menu-bar">
+        <it-button type="black" icon="home" @click="$router.push('/')" />
+        <Username
+          v-if="
+            $route.params.username
+              && (
+                !$store.state.user
+                || ($store.state.user
+                  && $store.state.user.username !== $route.params.username
+                )
+              )"
+          :limit-offset="0.8"
+          :content="user"
+          :disabled="true"
+        />
+      </div>
+      <template v-if="$store.state.authenticated && $store.state.user">
+        <it-badge
+          v-if="$store.getters.shopping"
+          type="danger"
+          class="profile-menu-item force"
+          point
+        >
+          <it-button
+            type="black"
+            icon="shopping_cart"
+            @click="modal = true"
+          />
+        </it-badge>
         <it-button
           type="black"
-          icon="shopping_cart"
-          @click="modal = true"
+          class="profile-menu-item"
+          icon="account_balance_wallet"
+          @click="$router.push('/profile/assets')"
         />
-      </it-badge>
+      </template>
       <it-button
         type="black"
-        class="profile-menu-item"
-        icon="account_balance_wallet"
-        @click="$router.push('/profile/assets')"
-      />
-    </template>
-    <it-button
-      type="black"
-      :class="`main-navigation-btn ${($store.state.user ? 'profile-summary' : 'connect-wallet')}`"
-      :loading="connecting"
-      @click="authenticate"
-    >
-      <template v-if="!$store.state.user && !connecting">
-        Connect to MetaMask
-      </template>
-      <template v-else-if="$store.state.user">
-        <it-avatar
-          :src="$store.state.user && $store.state.user.profile"
-          color="#a8a8c0"
-          size="40px"
-          square
-        />
-        <div class="profile-content">
-          <h3>{{ formattedBalance }}<sub>ETH</sub></h3>
-          <span>{{ secureAddress }}</span>
-        </div>
-      </template>
-    </it-button>
+        :class="`main-navigation-btn ${($store.state.user ? 'profile-summary' : 'connect-wallet')}`"
+        :loading="connecting"
+        @click="authenticate"
+      >
+        <template v-if="!$store.state.user && !connecting">
+          Connect to MetaMask
+        </template>
+        <template v-else-if="$store.state.user">
+          <it-avatar
+            :src="$store.state.user && $store.state.user.profile"
+            color="#a8a8c0"
+            size="40px"
+            square
+          />
+          <div class="profile-content">
+            <h3>{{ formattedBalance }}<sub>ETH</sub></h3>
+            <span>{{ secureAddress }}</span>
+          </div>
+        </template>
+      </it-button>
+    </div>
   </div>
   <it-modal v-if="$store.getters.shopping" v-model="modal" class="checkout-modal">
     <template #body>
@@ -126,7 +128,7 @@
 import Username from './Username.vue';
 import api from '../api';
 import _ from 'lodash';
-import utils from '../utils';
+import { sendTransaction } from '../utils';
 import { assets as assetsOptions } from '../config.json';
 
 const { ethereum } = window;
@@ -138,7 +140,6 @@ export default {
   },
   data() {
     return {
-      ethereum,
       connecting: true,
       user: null,
       userInitialized: false,
@@ -198,7 +199,7 @@ export default {
     },
     async payCheckoutItems() {
       this.$Loading.start();
-      const contract = await utils.sendTransaction(
+      const contract = await sendTransaction(
         _.reduce(this.$store.getters.checkoutItems, (a, i) => (a += i.priceRaw), 0), // eslint-disable-line
         this.$store.state.address,
       );
@@ -230,6 +231,18 @@ export default {
     z-index: 10000;
     background-color: white;
     border-bottom: 1px solid $ebonics;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .header-container {
+      display: inherit;
+      flex: 1;
+    }
 
     .menu-bar {
       display: inherit;
@@ -250,17 +263,14 @@ export default {
       margin-right: $large-gap;
     }
 
-    @media screen and (max-width: $extra-small-breakpoint) {
-      .profile-menu-item:not(.force) {
-        margin-right: 0;
+    @media screen and (max-width: $small-breakpoint) {
+      .profile-menu-item,
+      .main-navigation-btn {
+        display: none;
       }
     }
 
     .main-navigation-btn {
-      @media screen and (max-width: $extra-small-breakpoint) {
-        display: none;
-      }
-
       &.connect-wallet {
         padding: $large-gap;
       }

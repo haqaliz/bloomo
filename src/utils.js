@@ -12,6 +12,9 @@ module.exports = {
   log: consola,
   formatStatement: (statement, limit) => ((statement.length > limit)
     ? `${statement.substr(0, (limit - 1))}...` : statement),
+  extractExtension: (url) => url
+    .replace(`${url.replace(/\.\w{3,4}($|\?)/g, '')}.`, '')
+    .toLowerCase(),
   formatDate: (date, shortFormat = true) => {
     const formatted = utils.formatDistance(
       new Date(date),

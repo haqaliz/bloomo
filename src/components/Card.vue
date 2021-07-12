@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`card ${cardType}`"
+    :class="`card no-select ${cardType}`"
     :style="{
       backgroundColor: content.color,
       minHeight: `${size}px`,
@@ -13,11 +13,19 @@
       :type="type"
       :limit-offset="limitOffset"
       :content="content.creator"
+      :bold="content.is_bold"
     />
     <div
       class="artwork-detail flex"
     >
-      <h1 class="title">{{ title }}</h1>
+      <h1
+        :class="{
+          title: true,
+          'regular-parent': !content.is_bold,
+        }"
+      >
+        {{ title }}
+      </h1>
       <span v-if="cardType === 'bloom'" class="description">{{ strippedDescription }}</span>
       <VueShowdown v-else-if="cardType === 'palm'" class="description" :markdown="description" />
     </div>
@@ -104,7 +112,7 @@ export default {
       return this.type.toLowerCase();
     },
     title() {
-      return formatStatement(this.content.name, 10 * this.limitOffset);
+      return formatStatement(this.content.name, 6 * this.limitOffset);
     },
     contentType() {
       return {
@@ -132,12 +140,34 @@ export default {
     border-radius: $border-radius + 0.5rem;
     padding: $large-gap;
     margin-bottom: $large-gap;
+    -webkit-transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+    -moz-transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
 
     &.bloom {
       align-items: center;
 
+      &:hover {
+        -webkit-box-shadow: 0 0 1rem 0 rgba($black, 0.3);
+        -moz-box-shadow: 0 0 1rem 0 rgba($black, 0.3);
+        box-shadow: 0 0 1rem 0 rgba($black, 0.3);
+      }
+
+      &:active {
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        transform: scale(1.1);
+        -webkit-box-shadow: 0 0 2rem 0 rgba($black, 0.5);
+        -moz-box-shadow: 0 0 2rem 0 rgba($black, 0.5);
+        box-shadow: 0 0 2rem 0 rgba($black, 0.5);
+      }
+
       .creator-detail {
         margin-bottom: 0;
+      }
+
+      .regular-parent {
+        margin-left: $large-gap;
       }
 
       .artwork-detail,
@@ -154,8 +184,9 @@ export default {
 
       @media screen and (max-width: $medium-breakpoint) {
         .creator-detail {
-          background-color: transparent;
-          padding: 0;
+          .creator-profile {
+            margin-right: 0;
+          }
 
           .creator-username {
             display: none;
@@ -187,6 +218,8 @@ export default {
 
         .creator-detail {
           align-self: center;
+          background-color: transparent;
+          padding: 0 !important;
         }
 
         .artwork-detail {

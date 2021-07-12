@@ -30,6 +30,8 @@ export default {
       artworks: null,
       artworksInitialized: false,
       cardOptions,
+      foundUserAddress: null,
+      interval: null,
     };
   },
   watch: {
@@ -40,23 +42,32 @@ export default {
       deep: true,
     },
   },
+  unmounted() {
+    if (this.interval) clearInterval(this.interval);
+  },
   async mounted() {
-    this.findUserByUsername();
+    await this.loadArtworks();
+    this.interval = setInterval(
+      () => this.loadArtworks(0, (this.artworks && this.artworks.length)),
+      5000,
+    );
   },
   methods: {
-    async findUserByUsername() {
+    async loadArtworks(offset = 0, limit = 48) {
       if (
         this.$store.state.user
         && this.$store.state.user.username === this.$route.params.username
       ) this.$router.push('/profile');
       if (!this.artworksInitialized) this.$Loading.start();
-      const searchResult = await api.search(this.$route.params.username, ['users'], 1);
-      if (!searchResult.users.length) {
-        this.$Loading.finish();
-        return;
+      if (!this.foundUserAddress) {
+        const searchResult = await api.search(this.$route.params.username, ['users'], 1);
+        if (!searchResult.users.length) {
+          this.$Loading.finish();
+          return;
+        }
+        this.foundUserAddress = searchResult.users[0].id;
       }
-      const foundUserId = searchResult.users[0].id;
-      this.artworks = await api.artworks(foundUserId);
+      this.artworks = await api.artworks(this.foundUserAddress, offset, limit);
       if (!this.artworksInitialized) {
         this.$Loading.finish();
         this.artworksInitialized = true;

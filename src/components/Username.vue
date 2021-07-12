@@ -1,5 +1,6 @@
 <template>
   <it-button
+    v-if="bold"
     type="black"
     class="card-tag creator-detail"
     :loading="!content || !content.username"
@@ -11,7 +12,9 @@
   >
     <template v-if="content && content.username">
       <it-avatar
-        :src="content.profile"
+        v-if="bold"
+        :src="extractExtension(content.profile) !== 'gif' && content.profile"
+        :text="content.name"
         class="creator-profile"
         color="#a8a8c0"
         size="40px"
@@ -31,7 +34,7 @@
 </template>
 
 <script>
-import { formatStatement } from '../utils';
+import { formatStatement, extractExtension } from '../utils';
 
 export default {
   name: 'Username',
@@ -45,7 +48,13 @@ export default {
       default: 1,
     },
     content: Object,
+    bold: Boolean,
     disabled: Boolean,
+  },
+  data() {
+    return {
+      extractExtension,
+    };
   },
   computed: {
     creator() {
@@ -76,11 +85,11 @@ export default {
 
     .creator-profile {
       border-radius: $border-radius - 0.7rem;
+      margin-right: $large-gap - 0.5rem;
     }
 
     .creator-username {
       @include make-content-size(0.1rem, -200);
-      margin-left: $large-gap - 0.5rem;
     }
   }
 </style>

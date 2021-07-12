@@ -53,6 +53,7 @@ export default {
       artworks: null,
       artworksInitialized: false,
       cardOptions,
+      interval: null,
     };
   },
   watch: {
@@ -60,14 +61,21 @@ export default {
       await this.loadArtworks();
     },
   },
+  unmounted() {
+    if (this.interval) clearInterval(this.interval);
+  },
   async mounted() {
     await this.loadArtworks();
+    this.interval = setInterval(
+      () => this.loadArtworks(0, (this.artworks && this.artworks.length)),
+      5000,
+    );
   },
   methods: {
-    async loadArtworks() {
+    async loadArtworks(offset = 0, limit = 48) {
       if (!this.$store.state.address || !this.$store.state.authenticated) return;
       if (!this.artworksInitialized) this.$Loading.start();
-      this.artworks = await api.user.artworks();
+      this.artworks = await api.user.artworks(offset, limit);
       if (!this.artworksInitialized) {
         this.$Loading.finish();
         this.artworksInitialized = true;
