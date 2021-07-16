@@ -13,10 +13,14 @@
       :type="type"
       :limit-offset="limitOffset"
       :content="content.creator"
-      :bold="content.is_bold"
+      :hide="!content.is_bold"
     />
     <div
-      class="artwork-detail flex"
+      :class="{
+        'artwork-detail': true,
+        flex: true,
+        'regular-parent': !content.is_bold,
+      }"
     >
       <h1
         :class="{
@@ -166,10 +170,6 @@ export default {
         margin-bottom: 0;
       }
 
-      .regular-parent {
-        margin-left: $large-gap;
-      }
-
       .artwork-detail,
       .extra-detail {
         margin-left: $large-gap;
@@ -188,7 +188,7 @@ export default {
             margin-right: 0;
           }
 
-          .creator-username {
+          .creator-profile {
             display: none;
           }
         }
@@ -216,31 +216,40 @@ export default {
         border-radius: $border-radius - 0.2rem;
         padding: $large-gap - 0.5rem $large-gap - 1rem;
 
+        .regular-parent {
+          margin-left: $large-gap;
+        }
+
         .creator-detail {
           align-self: center;
-          background-color: transparent;
-          padding: 0 !important;
+          margin-left: $large-gap;
+          padding: $large-gap - 0.5rem;
+          height: 40px;
+          border-radius: $border-radius - 0.5rem;
+
+          .creator-username {
+            font-size: 11px;
+          }
         }
 
         .artwork-detail {
-          margin-left: $large-gap - 1rem;
-
           .title {
             @include make-content-size(0.2rem, -200);
+
+            &.regular-parent {
+              margin-left: $large-gap;
+            }
+          }
+
+          &.regular-parent {
+            margin-left: 0;
           }
         }
 
         .extra-detail {
-          margin-left: 0;
-
           .price {
             display: none;
           }
-        }
-
-        .card-tag {
-          padding: $large-gap - 0.8rem;
-          height: 40px !important;
         }
       }
     }

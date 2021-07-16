@@ -15,7 +15,7 @@ const routeConfig = (name, options) => ({
 });
 
 const routes = [
-  routeConfig('Profile', { useNameAsPath: true, component: () => import('../views/Profile.vue') }),
+  routeConfig('Profile', { useNameAsPath: true, component: () => import('../views/User.vue') }),
   routeConfig('Profile Assets', { path: '/profile/assets', component: () => import('../views/Assets.vue') }),
   routeConfig('Root', { useNameAsPath: true, component: () => import('../views/Home.vue') }),
   routeConfig('User', { path: '/user/:username', component: () => import('../views/User.vue') }),

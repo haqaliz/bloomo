@@ -1,5 +1,10 @@
 <template>
-  <template v-if="$store.state.authenticated && $store.state.user">
+  <template v-if="
+    $store.state.authenticated
+      && $store.state.user
+      && $store.state.user.id === reference.creator.id
+  "
+  >
     <it-button
       type="black"
       class="power-ups-handler"

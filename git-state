@@ -1,26 +1,17 @@
-commit 3c258445117bc49267c245253caa8d942a4af11c
+commit 7e01828e2bd1a4708fd31f021bd309782f4942de
 Author: Ali Alizade Haqiqi <aliz@x-matik.com>
-Date:   Mon Jul 12 19:33:55 2021 +0430
+Date:   Sat Jul 17 04:26:30 2021 +0430
 
-    meta tags
+    fix major issue
     
     Signed-off-by: Ali Alizade Haqiqi <aliz@x-matik.com>
 
 git-state
-package-lock.json
-package.json
-public/index.html
-src/assets/scss/theme.scss
-src/components/Asset.vue
 src/components/Card.vue
-src/components/Header.vue
-src/components/Price.vue
+src/components/PowerUps.vue
 src/components/Username.vue
-src/config.json
-src/store/index.js
-src/utils.js
-src/views/Assets.vue
+src/router/index.js
+src/views/Artwork.vue
 src/views/Home.vue
-src/views/NotFound.vue
 src/views/Profile.vue
 src/views/User.vue

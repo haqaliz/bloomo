@@ -1,6 +1,6 @@
 <template>
   <it-button
-    v-if="bold"
+    v-if="!hide"
     type="black"
     class="card-tag creator-detail"
     :loading="!content || !content.username"
@@ -48,7 +48,7 @@ export default {
       default: 1,
     },
     content: Object,
-    bold: Boolean,
+    hide: Boolean,
     disabled: Boolean,
   },
   data() {

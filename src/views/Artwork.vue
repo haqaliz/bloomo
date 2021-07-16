@@ -1,81 +1,92 @@
 <template>
-  <masonry
-    v-if="artwork"
-    class="masonry-container bottom-padding-removed flex"
-    :cols="artworkOptions.cols"
-    :gutter="artworkOptions.gutter"
-  >
-    <template
-      v-for="section of artworkOptions.sections"
-      :key="section"
-    >
-      <div
-        v-if="section === 'context'"
-        class="artwork-section artwork-context"
-        :style="{
-          backgroundImage: section === 'context' ? `url(${artwork.preview})` : 'none',
-        }"
-      >
-        <it-button
-          type="black"
-          :icon="artwork.type === 'video' ? 'play_arrow' : 'search'"
-          @click="modal = true"
-        />
-        <PowerUps
-          :reference="artwork"
-        />
-      </div>
-      <Card
-        v-else-if="section === 'description'"
-        :content="artwork"
-        :size="400"
-        :limit-offset="10"
-        :clickable="false"
-        :exclude="['type', 'artwork', 'power-ups']"
+  <template v-if="loading">
+    <div class="fluid-container loading">
+      <it-loading
+        radius="14"
+        stroke="3"
+        color="#000"
       />
-    </template>
-  </masonry>
-  <masonry
-    v-if="artwork && artworkOptions.sections.includes('auctions')"
-    class="masonry-container top-padding-removed flex"
-    :cols="artworkOptions.auctions.cols"
-    :gutter="artworkOptions.auctions.gutter"
-  >
-    <div
-      v-for="(auction, key) of auctions"
-      :key="key"
-      class="auction"
-      :style="{ backgroundColor: artwork.color }"
-    >
-      <Username
-        :limit-offset="0.8"
-        :content="auction.actor"
-      />
-      <div class="section">
-        <Timestamp :content="auction.date" />
-        <Price :content="auction" />
-      </div>
     </div>
-  </masonry>
-  <it-modal v-if="artwork" v-model="modal" class="artwork-modal">
-    <template #body>
-      <video
-        v-if="artwork.type === 'video'"
-        class="artwork-context"
-        :src="artwork.url"
-        :poster="artwork.preview"
-        loop autoplay muted playsinline
-      />
+  </template>
+  <template v-else>
+    <masonry
+      v-if="artwork"
+      class="masonry-container bottom-padding-removed flex"
+      :cols="artworkOptions.cols"
+      :gutter="artworkOptions.gutter"
+    >
+      <template
+        v-for="section of artworkOptions.sections"
+        :key="section"
+      >
+        <div
+          v-if="section === 'context'"
+          class="artwork-section artwork-context"
+          :style="{
+            backgroundImage: section === 'context' ? `url(${artwork.preview})` : 'none',
+          }"
+        >
+          <it-button
+            type="black"
+            :icon="artwork.type === 'video' ? 'play_arrow' : 'search'"
+            @click="modal = true"
+          />
+          <PowerUps
+            :reference="artwork"
+          />
+        </div>
+        <Card
+          v-else-if="section === 'description'"
+          :content="artwork"
+          :size="400"
+          :limit-offset="10"
+          :clickable="false"
+          :exclude="['type', 'artwork', 'power-ups']"
+        />
+      </template>
+    </masonry>
+    <masonry
+      v-if="artwork && artworkOptions.sections.includes('auctions')"
+      class="masonry-container top-padding-removed flex"
+      :cols="artworkOptions.auctions.cols"
+      :gutter="artworkOptions.auctions.gutter"
+    >
       <div
-        v-else
-        :src="artwork.url"
-        class="img"
-        :style="{
-          backgroundImage: `url(${artwork.preview})`,
-        }"
-      />
-    </template>
-  </it-modal>
+        v-for="(auction, key) of auctions"
+        :key="key"
+        class="auction"
+        :style="{ backgroundColor: artwork.color }"
+      >
+        <Username
+          :limit-offset="0.8"
+          :content="auction.actor"
+        />
+        <div class="section">
+          <Timestamp :content="auction.date" />
+          <Price :content="auction" />
+        </div>
+      </div>
+    </masonry>
+    <it-modal v-if="artwork" v-model="modal" class="artwork-modal">
+      <template #body>
+        <video
+          v-if="artwork.type === 'video'"
+          class="artwork-context"
+          :src="artwork.url"
+          :poster="artwork.preview"
+          loop autoplay muted playsinline
+        />
+        <div
+          v-else
+          :src="artwork.url"
+          class="img"
+          :style="{
+            backgroundImage: `url(${artwork.preview})`,
+          }"
+        />
+      </template>
+    </it-modal>
+  </template>
 </template>
 
 <script>
@@ -101,6 +112,7 @@ export default {
     return {
       artwork: null,
       artworkInitialized: false,
+      loading: false,
       modal: false,
       artworkOptions,
       interval: null,
@@ -117,13 +129,8 @@ export default {
     },
   },
   async mounted() {
-    if (!this.artworkInitialized) this.$Loading.start();
     await this.fetchArtworkDetail();
     this.interval = setInterval(() => this.fetchArtworkDetail(), 5000);
-    if (!this.artworkInitialized) {
-      this.$Loading.finish();
-      this.artworkInitialized = true;
-    }
   },
   unmounted() {
     if (this.interval) clearInterval(this.interval);
@@ -131,6 +138,10 @@ export default {
   methods: {
     async fetchArtworkDetail() {
       let artworkHistory = (this.artwork && this.artwork.history) || [];
+      if (!this.artworkInitialized) {
+        this.$Loading.start();
+        this.loading = true;
+      }
       this.artwork = await api.artwork(this.$route.params.artwork_id);
       if (
         (!this.artworkInitialized && !artworkHistory.length)
@@ -152,6 +163,11 @@ export default {
         ...this.artwork,
         history: artworkHistory,
       };
+      if (!this.artworkInitialized) {
+        this.$Loading.finish();
+        this.artworkInitialized = true;
+        this.loading = false;
+      }
     },
   },
 };
@@ -182,7 +198,7 @@ export default {
       &.artwork-context {
         background-repeat: no-repeat;
         background-position: center;
-        background-size: cover;
+        background-size: 150%;
         border: 1px solid $ebonics;
         align-items: flex-end;
         justify-content: flex-start;
@@ -230,10 +246,11 @@ export default {
   .artwork-modal {
     .it-modal-content {
       padding: 0 !important;
-      height: $small-breakpoint;
+      max-height: 100%;
       overflow:hidden;
 
       video {
+        width: 100%;
         height: 100%;
       }
 
