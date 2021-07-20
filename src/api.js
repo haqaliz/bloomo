@@ -48,6 +48,10 @@ const api = {
         contract, content,
       }),
     },
+    states: async (id) => {
+      const res = await ax.get(`user/${id}/states`);
+      return res.data;
+    },
   },
   artworks: async (id, offset = 0, limit = 48) => {
     const res = await ax.get(`user/${id}/artworks`, {

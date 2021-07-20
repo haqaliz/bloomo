@@ -11,16 +11,28 @@
   </template>
   <template v-else>
     <div
-      v-if="user
-        && (
-          user.bio
-          || (user.links && user.links.length)
-        )"
+      v-if="user && user.bio"
       class="profile-detail"
     >
-      <it-badge class="biography" value="Bio" position="top-right">
-        <it-tag>{{ user.bio }}</it-tag>
-      </it-badge>
+      <it-tag>
+        <it-badge value="Bio" />
+        {{ user.bio }}
+      </it-tag>
+      <template v-if="userStates">
+        <it-tag
+          v-for="(value, key) in userStates"
+          :key="`state-${key}`"
+        >
+          <it-badge :value="key" />
+          {{ value }}
+        </it-tag>
+      </template>
+    </div>
+    <div
+      v-if="user
+        && (user.links && user.links.length)"
+      class="profile-detail"
+    >
       <a
         v-for="(link, k) in user.links"
         :key="k"
@@ -75,6 +87,7 @@ export default {
       loading: false,
       cardOptions,
       foundUser: null,
+      userStates: null,
       interval: null,
     };
   },
@@ -129,6 +142,7 @@ export default {
           return api.artworks(this.foundUser.id, offset, limit);
         },
       }[this.$route.name]();
+      this.userStates = await api.user.states(this.$store.state.address || this.foundUser.id);
       if (!this.artworksInitialized) {
         this.$Loading.finish();
         this.artworksInitialized = true;
@@ -154,12 +168,25 @@ export default {
     border-radius: $border-radius;
     flex-wrap: wrap;
 
-    .biography {
+    .it-tag {
+      background-color: black;
+      color: white;
+      height: auto;
+      font-weight: bold;
+      min-height: $general-size;
+      padding: $large-gap;
+      line-height: $large-gap;
       margin: 0 $large-gap $large-gap 0;
+      max-width: calc(50% - #{$large-gap});
+      align-self: flex-start;
 
-      .it-tag {
-        background-color: black;
-        color: white;
+      .it-badge {
+        margin-right: $large-gap;
+
+        .it-badge-body {
+          border: none;
+          padding: $large-gap - 1rem $large-gap - 0.5rem;
+        }
       }
     }
 

@@ -244,22 +244,27 @@ export default {
   }
 
   .artwork-modal {
-    .it-modal-content {
-      padding: 0 !important;
-      max-height: 100%;
-      overflow:hidden;
+    .it-modal-body {
+      background-color: transparent;
 
-      video {
-        width: 100%;
-        height: 100%;
-      }
+      .it-modal-content {
+        padding: 0 !important;
+        max-height: 100%;
+        overflow:hidden;
 
-      .img {
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        width: 100%;
-        height: 100%;
+        video {
+          width: 100%;
+          height: 100%;
+        }
+
+        .img {
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          width: 100%;
+          height: 100%;
+          min-height: 400px;
+        }
       }
     }
   }

@@ -1,17 +1,11 @@
-commit 7e01828e2bd1a4708fd31f021bd309782f4942de
+commit 7c9e5e6b0d988570827d6510712eff796dc020ba
 Author: Ali Alizade Haqiqi <aliz@x-matik.com>
-Date:   Sat Jul 17 04:26:30 2021 +0430
+Date:   Wed Jul 21 03:41:31 2021 +0430
 
-    fix major issue
+    user follows state
     
     Signed-off-by: Ali Alizade Haqiqi <aliz@x-matik.com>
 
 git-state
-src/components/Card.vue
-src/components/PowerUps.vue
-src/components/Username.vue
-src/router/index.js
-src/views/Artwork.vue
-src/views/Home.vue
-src/views/Profile.vue
+src/api.js
 src/views/User.vue
