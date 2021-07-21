@@ -14,7 +14,10 @@
       v-if="user && user.bio"
       class="profile-detail"
     >
-      <it-tag>
+      <it-tag
+        class="full-width"
+        @mouseenter="addAnalysisTarget('bio')"
+      >
         <it-badge value="Bio" />
         {{ user.bio }}
       </it-tag>
@@ -22,6 +25,7 @@
         <it-tag
           v-for="(value, key) in userStates"
           :key="`state-${key}`"
+          @mouseenter="addAnalysisTarget(key)"
         >
           <it-badge :value="key" />
           {{ value }}
@@ -38,6 +42,7 @@
         :key="k"
         :class="`it-btn it-btn--normal platform ${link.platform}`"
         :href="fullAddress(link)"
+        @mouseenter="addAnalysisTarget('social_links')"
       >
         {{ link.platform }}
       </a>
@@ -57,6 +62,7 @@
         :exclude="$store.state.authenticated
           ? ['user', 'type']
           : ['user', 'type', 'power-ups']"
+        @mouseenter="addAnalysisTarget('artworks')"
       />
     </masonry>
     <div
@@ -89,6 +95,11 @@ export default {
       foundUser: null,
       userStates: null,
       interval: null,
+      analysis: {
+        beginAt: null,
+        targets: [],
+        interval: null,
+      },
     };
   },
   computed: {
@@ -104,15 +115,18 @@ export default {
       deep: true,
     },
   },
-  unmounted() {
-    if (this.interval) clearInterval(this.interval);
-  },
   async mounted() {
     await this.loadArtworks();
     this.interval = setInterval(
       () => this.loadArtworks(0, (this.artworks && this.artworks.length)),
       5000,
     );
+    if (this.$route.name === 'Profile') return;
+    this.startAnalysis();
+  },
+  async unmounted() {
+    if (this.interval) clearInterval(this.interval);
+    this.endAnalysis();
   },
   methods: {
     async loadArtworks(offset = 0, limit = 48) {
@@ -155,6 +169,29 @@ export default {
         discord: `https://discord.com/users/${link.handle}`,
       }[link.platform] ?? link.handle;
     },
+    addAnalysisTarget(name) {
+      if (!this.analysis.targets.includes(name)) this.analysis.targets.push(name);
+      this.getUpdateAnalysis();
+    },
+    startAnalysis() {
+      this.analysis.beginAt = Date.now();
+      this.analysis.interval = setInterval(this.getUpdateAnalysis, 5000);
+    },
+    async endAnalysis() {
+      if (this.$route.name === 'Profile') return;
+      await api.analysis(JSON.parse(this.getUpdateAnalysis()));
+      localStorage.removeItem('analysis');
+      if (this.analysis.interval) clearInterval(this.analysis.interval);
+    },
+    getUpdateAnalysis() {
+      localStorage.setItem('analysis', JSON.stringify({
+        targetType: 'users',
+        targetId: this.foundUser.id,
+        duration: (Date.now() - this.analysis.beginAt) / 1000,
+        targets: this.analysis.targets,
+      }));
+      return localStorage.getItem('analysis');
+    },
   },
 };
 </script>
@@ -176,9 +213,12 @@ export default {
       min-height: $general-size;
       padding: $large-gap;
       line-height: $large-gap;
-      margin: 0 $large-gap $large-gap 0;
-      max-width: calc(50% - #{$large-gap});
       align-self: flex-start;
+      margin: 0 $large-gap $large-gap 0;
+
+      &:not(.full-width) {
+        max-width: calc(50% - #{$large-gap});
+      }
 
       .it-badge {
         margin-right: $large-gap;

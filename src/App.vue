@@ -7,6 +7,7 @@
 
 <script>
 import Header from './components/Header.vue';
+import api from './api';
 import _ from 'lodash';
 
 const { ethereum } = window;
@@ -17,6 +18,11 @@ export default {
     Header,
   },
   async created() {
+    const remainedAnalysis = localStorage.getItem('analysis');
+    if (remainedAnalysis) {
+      await api.analysis(JSON.parse(remainedAnalysis));
+      localStorage.removeItem('analysis');
+    }
     this.$store.dispatch('updateEthPrice');
     const isUnlocked = _.get(ethereum, '_metamask.isUnlocked');
     if (ethereum && !ethereum.selectedAddress && await isUnlocked()) {

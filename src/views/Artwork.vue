@@ -25,6 +25,7 @@
           :style="{
             backgroundImage: section === 'context' ? `url(${artwork.preview})` : 'none',
           }"
+          @mouseenter="addAnalysisTarget('content')"
         >
           <it-button
             type="black"
@@ -42,6 +43,7 @@
           :limit-offset="10"
           :clickable="false"
           :exclude="['type', 'artwork', 'power-ups']"
+          @mouseenter="addAnalysisTarget('description')"
         />
       </template>
     </masonry>
@@ -56,6 +58,7 @@
         :key="key"
         class="auction"
         :style="{ backgroundColor: artwork.color }"
+        @mouseenter="addAnalysisTarget('auctions')"
       >
         <Username
           :limit-offset="0.8"
@@ -75,6 +78,7 @@
           :src="artwork.url"
           :poster="artwork.preview"
           loop autoplay muted playsinline
+          @mouseenter="addAnalysisTarget('zoomed-in-content')"
         />
         <div
           v-else
@@ -83,6 +87,7 @@
           :style="{
             backgroundImage: `url(${artwork.preview})`,
           }"
+          @mouseenter="addAnalysisTarget('zoomed-in-content')"
         />
       </template>
     </it-modal>
@@ -116,6 +121,11 @@ export default {
       modal: false,
       artworkOptions,
       interval: null,
+      analysis: {
+        beginAt: null,
+        targets: [],
+        interval: null,
+      },
     };
   },
   computed: {
@@ -131,9 +141,11 @@ export default {
   async mounted() {
     await this.fetchArtworkDetail();
     this.interval = setInterval(() => this.fetchArtworkDetail(), 5000);
+    this.startAnalysis();
   },
-  unmounted() {
+  async unmounted() {
     if (this.interval) clearInterval(this.interval);
+    this.endAnalysis();
   },
   methods: {
     async fetchArtworkDetail() {
@@ -168,6 +180,28 @@ export default {
         this.artworkInitialized = true;
         this.loading = false;
       }
+    },
+    addAnalysisTarget(name) {
+      if (!this.analysis.targets.includes(name)) this.analysis.targets.push(name);
+      this.getUpdateAnalysis();
+    },
+    startAnalysis() {
+      this.analysis.beginAt = Date.now();
+      this.analysis.interval = setInterval(this.getUpdateAnalysis, 5000);
+    },
+    async endAnalysis() {
+      await api.analysis(JSON.parse(this.getUpdateAnalysis()));
+      localStorage.removeItem('analysis');
+      if (this.analysis.interval) clearInterval(this.analysis.interval);
+    },
+    getUpdateAnalysis() {
+      localStorage.setItem('analysis', JSON.stringify({
+        targetType: 'artworks',
+        targetId: this.$route.params.artwork_id,
+        duration: (Date.now() - this.analysis.beginAt) / 1000,
+        targets: this.analysis.targets,
+      }));
+      return localStorage.getItem('analysis');
     },
   },
 };

@@ -53,6 +53,12 @@ const api = {
       return res.data;
     },
   },
+  analysis: async (options) => ax.post(`analysis/${options.targetType}/${options.targetId}`, {
+    duration: options.duration,
+    ...(options.targets && {
+      targets: options.targets,
+    }),
+  }),
   artworks: async (id, offset = 0, limit = 48) => {
     const res = await ax.get(`user/${id}/artworks`, {
       params: { offset, limit },

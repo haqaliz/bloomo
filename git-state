@@ -1,4 +1,4 @@
-commit 7c9e5e6b0d988570827d6510712eff796dc020ba
+commit 97a6ba8593a51eb97818281e825ec6f40c64ea74
 Author: Ali Alizade Haqiqi <aliz@x-matik.com>
 Date:   Wed Jul 21 03:41:31 2021 +0430
 
@@ -8,4 +8,5 @@ Date:   Wed Jul 21 03:41:31 2021 +0430
 
 git-state
 src/api.js
+src/views/Artwork.vue
 src/views/User.vue
