@@ -180,6 +180,13 @@ export default {
         this.artworkInitialized = true;
         this.loading = false;
       }
+      const a = await api.user.analysis({
+        targetType: 'artworks',
+        targetId: 'bdfb8d54-8175-492b-be4e-6619f316bb54',
+        from: Date.now() - 7 * 60 * 60 * 24 * 1000,
+        to: Date.now(),
+      });
+      console.log(a);
     },
     addAnalysisTarget(name) {
       if (!this.analysis.targets.includes(name)) this.analysis.targets.push(name);
