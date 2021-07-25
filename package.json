@@ -9,6 +9,7 @@
     "lint-scss": "stylelint '**/*.scss'"
   },
   "dependencies": {
+    "@amcharts/amcharts4": "^4.10.20",
     "axios": "^0.21.1",
     "consola": "^2.15.3",
     "core-js": "^3.6.5",

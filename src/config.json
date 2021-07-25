@@ -21,7 +21,7 @@
 		}
 	},
 	"artwork": {
-		"sections": ["context", "description", "auctions"],
+		"sections": ["context", "analysis", "description", "auctions"],
 		"auctions": {
 			"cols": {
 				"default": 4,

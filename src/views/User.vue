@@ -119,7 +119,7 @@ export default {
     await this.loadArtworks();
     this.interval = setInterval(
       () => this.loadArtworks(0, (this.artworks && this.artworks.length)),
-      5000,
+      30000,
     );
     if (this.$route.name === 'Profile') return;
     this.startAnalysis();

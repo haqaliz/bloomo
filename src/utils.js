@@ -10,6 +10,11 @@ const estimateCorrectAmount = (amount) => (
 );
 module.exports = {
   log: consola,
+  hideLicenseFromChart: (chart) => {
+    const chartTitle = chart.querySelector('title');
+    if (!chartTitle) return;
+    chartTitle.parentNode.style.display = 'none';
+  },
   formatStatement: (statement, limit) => ((statement.length > limit)
     ? `${statement.substr(0, (limit - 1))}...` : statement),
   extractExtension: (url) => url

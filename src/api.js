@@ -52,12 +52,15 @@ const api = {
       const res = await ax.get(`user/${id}/states`);
       return res.data;
     },
-    analysis: async (options) => ax.get(`user/analysis/${options.targetType}/${options.targetId}`, {
-      params: {
-        from: options.from / 1000,
-        to: options.to / 1000,
-      },
-    }),
+    analysis: async (options) => {
+      const res = await ax.get(`user/analysis/${options.targetType}/${options.targetId}`, {
+        params: {
+          from: options.from / 1000,
+          to: options.to / 1000,
+        },
+      });
+      return res.data;
+    },
   },
   analysis: async (options) => ax.post(`analysis/${options.targetType}/${options.targetId}`, {
     duration: options.duration,

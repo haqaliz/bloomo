@@ -52,7 +52,7 @@ export default {
     await this.loadArtworks();
     this.interval = setInterval(
       () => this.loadArtworks(),
-      5000,
+      30000,
     );
   },
   methods: {

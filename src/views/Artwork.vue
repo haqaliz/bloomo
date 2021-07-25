@@ -36,17 +36,38 @@
             :reference="artwork"
           />
         </div>
-        <Card
-          v-else-if="section === 'description'"
-          :content="artwork"
-          :size="400"
-          :limit-offset="10"
-          :clickable="false"
-          :exclude="['type', 'artwork', 'power-ups']"
-          @mouseenter="addAnalysisTarget('description')"
-        />
+        <div
+          v-if="section === 'analysis'"
+          class="artwork-section area-plot-container"
+          :style="{ backgroundColor: artwork.color }"
+        >
+          <div v-if="!analysis.fetched" class="fluid-container loading">
+            <it-loading
+              radius="14"
+              stroke="3"
+              color="#000"
+            />
+          </div>
+          <template v-else>
+            <div class="plot-info">
+              <h2>Views: 7 days</h2>
+              <it-tag type="black" filled>{{ totalViewCount }}</it-tag>
+            </div>
+            <AreaPlot :data="analysis.fetched" />
+          </template>
+        </div>
       </template>
     </masonry>
+    <Card
+      v-if="artwork && artworkOptions.sections.includes('description')"
+      class="artwork-description"
+      :content="artwork"
+      :size="400"
+      :limit-offset="10"
+      :clickable="false"
+      :exclude="['type', 'artwork', 'power-ups']"
+      @mouseenter="addAnalysisTarget('description')"
+    />
     <masonry
       v-if="artwork && artworkOptions.sections.includes('auctions')"
       class="masonry-container top-padding-removed flex"
@@ -100,6 +121,8 @@ import Timestamp from '../components/Timestamp.vue';
 import Username from '../components/Username.vue';
 import PowerUps from '../components/PowerUps.vue';
 import Card from '../components/Card.vue';
+import AreaPlot from '../components/AreaPlot.vue';
+import _ from 'lodash';
 import api from '../api';
 import { formatStatement } from '../utils';
 import { artwork as artworkOptions } from '../config.json';
@@ -112,6 +135,7 @@ export default {
     Username,
     PowerUps,
     Card,
+    AreaPlot,
   },
   data() {
     return {
@@ -125,6 +149,7 @@ export default {
         beginAt: null,
         targets: [],
         interval: null,
+        fetched: null,
       },
     };
   },
@@ -137,10 +162,18 @@ export default {
         (i) => i.type.toLowerCase() !== 'settled',
       );
     },
+    totalViewCount() {
+      if (!this.analysis.fetched) return 0;
+      return _.reduce(
+        this.analysis.fetched,
+        (a, i) => (a += i.count), // eslint-disable-line no-return-assign
+        0,
+      );
+    },
   },
   async mounted() {
     await this.fetchArtworkDetail();
-    this.interval = setInterval(() => this.fetchArtworkDetail(), 5000);
+    this.interval = setInterval(() => this.fetchArtworkDetail(), 30000);
     this.startAnalysis();
   },
   async unmounted() {
@@ -175,18 +208,17 @@ export default {
         ...this.artwork,
         history: artworkHistory,
       };
+      this.analysis.fetched = await api.user.analysis({
+        targetType: 'artworks',
+        targetId: this.artwork.id,
+        from: Date.now() - 7 * 60 * 60 * 24 * 1000,
+        to: Date.now(),
+      });
       if (!this.artworkInitialized) {
         this.$Loading.finish();
         this.artworkInitialized = true;
         this.loading = false;
       }
-      const a = await api.user.analysis({
-        targetType: 'artworks',
-        targetId: 'bdfb8d54-8175-492b-be4e-6619f316bb54',
-        from: Date.now() - 7 * 60 * 60 * 24 * 1000,
-        to: Date.now(),
-      });
-      console.log(a);
     },
     addAnalysisTarget(name) {
       if (!this.analysis.targets.includes(name)) this.analysis.targets.push(name);
@@ -204,7 +236,7 @@ export default {
     getUpdateAnalysis() {
       localStorage.setItem('analysis', JSON.stringify({
         targetType: 'artworks',
-        targetId: this.$route.params.artwork_id,
+        targetId: this.artwork.id,
         duration: (Date.now() - this.analysis.beginAt) / 1000,
         targets: this.analysis.targets,
       }));
@@ -282,6 +314,41 @@ export default {
         }
       }
     }
+
+    .area-plot-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-bottom: $large-gap;
+      border-radius: $border-radius;
+      overflow: hidden;
+      padding: 0;
+      display: flex;
+      align-items: flex-start;
+      height: 438px;
+
+      .plot-info {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        padding: $large-gap;
+
+        .it-tag {
+          font-size: $large-gap;
+          margin-left: $large-gap;
+          min-width: $general-size;
+          justify-content: center;
+        }
+      }
+
+      .area-plot-content {
+        max-height: 75%;
+      }
+    }
+  }
+
+  .artwork-description {
+    margin: 0 $large-gap $large-gap $large-gap;
   }
 
   .artwork-modal {

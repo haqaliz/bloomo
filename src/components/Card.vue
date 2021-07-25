@@ -131,7 +131,7 @@ export default {
       );
     },
     description() {
-      return formatStatement(this.content.description, 24 * this.limitOffset);
+      return formatStatement(this.content.description, 13 * this.limitOffset);
     },
   },
 };
