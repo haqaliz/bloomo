@@ -104,7 +104,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.user || this.foundUser;
+      return this.foundUser || this.$store.state.user;
     },
   },
   watch: {
@@ -215,9 +215,12 @@ export default {
       line-height: $large-gap;
       align-self: flex-start;
       margin: 0 $large-gap $large-gap 0;
+      max-width: calc(50% - #{$large-gap});
 
-      &:not(.full-width) {
-        max-width: calc(50% - #{$large-gap});
+      @media screen and (max-width: $medium-breakpoint) {
+        &.full-width {
+           max-width: 100%;
+        }
       }
 
       .it-badge {
