@@ -6,6 +6,18 @@
 		"url": "https://bloomo.app"
 	},
 	"walletId": "0x9352fD6885E5B96e9a92A84D49AbDbEeA9DF8d2E",
+	"filters": {
+		"home": [
+		 	{
+				"name": "Latest",
+				"value": "latest"
+		  	},
+		  	{
+				"name": "Most Viewed",
+				"value": "most-viewed"
+		 	}
+		]
+	},
 	"card": {
 		"palm": {
 			"cols": {

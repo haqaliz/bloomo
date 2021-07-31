@@ -1,19 +1,16 @@
-commit 6361bcdc71bda4eb4a6c3b9c4863df3a273815cc
+commit 652419da0bc30201592d15177e137d4bcbe9c211
 Author: Ali Alizade Haqiqi <aliz@x-matik.com>
-Date:   Sun Jul 25 16:45:54 2021 +0430
+Date:   Sat Jul 31 14:48:21 2021 +0430
 
-    views count
+    change mode of artwork
     
     Signed-off-by: Ali Alizade Haqiqi <aliz@x-matik.com>
 
-git-state
-package-lock.json
-package.json
 src/api.js
-src/components/AreaPlot.vue
-src/components/Card.vue
+src/assets/scss/theme.scss
+src/assets/scss/variables.scss
+src/components/Header.vue
 src/config.json
-src/utils.js
-src/views/Artwork.vue
+src/store/index.js
 src/views/Home.vue
 src/views/User.vue

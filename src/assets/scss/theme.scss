@@ -200,6 +200,61 @@
     }
   }
 }
+.it-select {
+  .it-select-selection--active {
+    border-color: $black !important;
+  }
+  
+  .it-select-selection {
+    height: $general-size;
+    border-radius: $border-radius;
+    background-color: $black;
+    color: $white;
+    padding: $large-gap;
+
+    &:hover {
+      border-color: $black;
+    }
+
+    .it-select-arrow {
+      color: $white;
+    }
+
+    .it-select-selection--active > .it-select-arrow {
+      color: $white;
+    }
+
+    .it-select-selection--active:hover {
+      border-color: $black;
+    }
+
+    &:focus:not(.it-select-selection--disabled) {
+      border-color: $black;
+      box-shadow:0 2px 4px rgba($black, 0.4),0 0 0 3px rgba($black, 0.2)
+    }
+  }
+
+  .it-select-dropdown {
+    .it-select-list {
+      background-color: $black;
+      color: $white;
+      border-radius: $border-radius;
+
+      .it-select-option {
+        padding: $large-gap;
+
+        &:hover {
+          background-color: rgba($white, 0.1);
+        }
+
+        .it-select-option-check {
+          background-color: #f93155;
+          margin-top: 8px;
+        }
+      }
+    }
+  }
+}
 
 .it-loadingbar {
   background-color: $black;

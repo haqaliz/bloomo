@@ -3,6 +3,7 @@ import api from '../api';
 import _ from 'lodash';
 import {
   assets as assetsOptions,
+  filters as filterOptions,
 } from '../config.json';
 
 const { ethereum } = window;
@@ -18,6 +19,12 @@ export default createStore({
       .mapValues(() => 0)
       .value(),
     ethPrice: null,
+    filters: {
+      home: {
+        current: filterOptions.home[0],
+        options: filterOptions.home,
+      },
+    },
   },
   getters: {
     shopping: (state) => (_.reduce(state.shoppingCart, (a, i) => (a += i), 0) > 0), // eslint-disable-line

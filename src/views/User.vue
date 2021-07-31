@@ -153,7 +153,7 @@ export default {
             }
             this.foundUser = searchResult.users[0];
           }
-          return api.artworks(this.foundUser.id, offset, limit);
+          return api.artworks(this.foundUser.id, this.$store.state.filters.home.current.value, offset, limit);
         },
       }[this.$route.name]();
       this.userStates = await api.user.states(this.$store.state.address || this.foundUser.id);

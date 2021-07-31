@@ -45,6 +45,12 @@ export default {
       cardOptions,
     };
   },
+  watch: {
+    '$store.state.filters.home.current.value': async function homeWatchingOnItsFilter() {
+      this.artworksInitialized = false;
+      await this.loadArtworks();
+    },
+  },
   unmounted() {
     if (this.interval) clearInterval(this.interval);
   },
@@ -61,7 +67,7 @@ export default {
         this.$Loading.start();
         this.loading = true;
       }
-      this.artworks = await api.artworks('all');
+      this.artworks = await api.artworks('all', this.$store.state.filters.home.current.value);
       if (!this.artworksInitialized) {
         this.$Loading.finish();
         this.artworksInitialized = true;

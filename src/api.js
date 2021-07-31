@@ -34,7 +34,7 @@ const api = {
       return api.user.authenticated();
     },
     logout: async () => ax.post('auth/logout'),
-    artworks: async (offset = 0, limit = 48) => {
+    artworks: async (offset = 0, limit = 50) => {
       const res = await ax.get('user/artworks', {
         params: { offset, limit },
       });
@@ -68,8 +68,8 @@ const api = {
       targets: options.targets,
     }),
   }),
-  artworks: async (id, offset = 0, limit = 48) => {
-    const res = await ax.get(`user/${id}/artworks`, {
+  artworks: async (id, granularity, offset = 0, limit = 50) => {
+    const res = await ax.get(`user/${id}/artworks/${granularity}`, {
       params: { offset, limit },
     });
     return res.data;

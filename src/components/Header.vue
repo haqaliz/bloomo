@@ -16,6 +16,11 @@
           :content="user"
           :disabled="true"
         />
+        <it-select
+          v-if="$route.path === '/'"
+          v-model="$store.state.filters.home.current"
+          :options="$store.state.filters.home.options"
+        />
       </div>
       <template v-if="$store.state.authenticated && $store.state.user">
         <it-badge
@@ -231,7 +236,7 @@ export default {
     z-index: 10000;
     background-color: white;
     border-bottom: 1px solid $ebonics;
-    overflow-x: scroll;
+    /* overflow-x: scroll; */
     -ms-overflow-style: none;
     scrollbar-width: none;
 

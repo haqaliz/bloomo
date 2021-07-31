@@ -206,8 +206,13 @@ export default {
         }
 
         .description,
-        .artwork {
+        .artwork,
+        .creator-detail {
           display: none;
+        }
+
+        .extra-detail {
+          margin-right: $large-gap - 0.75rem;;
         }
       }
 
@@ -247,8 +252,8 @@ export default {
         }
 
         .extra-detail {
-          .price {
-            display: none;
+          .price-section .it-tag {
+            border-radius: $border-radius - 0.5rem;
           }
         }
       }
